@@ -144,3 +144,6 @@ test-results/
 # Local environment
 .env
 .env.local
+
+# Claude settings
+.claude/

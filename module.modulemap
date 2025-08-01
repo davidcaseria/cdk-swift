@@ -1,4 +1,0 @@
-module CashuDevKitFFI {
-    header "CashuDevKitFFI.h"
-    export *
-}
