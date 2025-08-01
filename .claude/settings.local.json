@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(swift build:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(swift:*)",
+      "Bash(./build-native.sh:*)",
+      "Bash(cp:*)",
+      "Bash(just list:*)",
+      "Bash(just check-tools:*)",
+      "Bash(just info)",
+      "Bash(just build-rust:*)",
+      "Bash(just generate-bindings:*)",
+      "Bash(just build-native:*)",
+      "Bash(just test:*)",
+      "Bash(just clean:*)",
+      "Bash(ls:*)",
+      "Bash(just build:*)",
+      "Bash(just check-cdk:*)",
+      "Bash(CDK_DIR=/Users/david/Projects/cdk just check-cdk)",
+      "Bash(CDK_DIR=/nonexistent/path just check-cdk)",
+      "Bash(CDK_DIR=/Users/david/Projects/cdk just build-native)",
+      "Bash(CDK_DIR=/Users/david/Projects/cdk just test-rust)",
+      "Bash(rustup target list:*)"
+    ],
+    "deny": []
+  }
+}

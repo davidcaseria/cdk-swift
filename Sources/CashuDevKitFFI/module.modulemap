@@ -1,0 +1,5 @@
+module CashuDevKitFFI {
+    header "CashuDevKitFFI.h"
+    export *
+    link "cdk_ffi"
+}
