@@ -82,7 +82,6 @@ import CashuDevKit
 ```swift
 let mnemonic = try generateMnemonic()
 print("Generated mnemonic: \(mnemonic)")
-// Output: "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
 ```
 
 ### Create a Wallet
@@ -113,23 +112,17 @@ if let info = mintInfo {
 }
 ```
 
-### Create a Mint Quote
+### Mint Tokens
 
 ```swift
+// Create a mint quote
 let amount = Amount(value: 1000) // 1000 sats
 let quote = try await wallet.mintQuote(
     amount: amount, 
     description: "My payment"
 )
 
-print("Quote ID: \(quote.id())")
-print("Payment request: \(quote.request())")
-print("Amount: \(quote.amountMintable().value)")
-```
-
-### Mint Tokens
-
-```swift
+// Mint tokens after paying the quote
 let proofs = try await wallet.mint(
     quoteId: quote.id(),
     amountSplitTarget: SplitTarget.none,
@@ -137,19 +130,6 @@ let proofs = try await wallet.mint(
 )
 
 print("Minted \(proofs.count) proofs")
-```
-
-### Create a Melt Quote (for Lightning payments)
-
-```swift
-let invoice = "lnbc1000n1..." // Lightning invoice
-let meltQuote = try await wallet.meltQuote(
-    request: invoice,
-    options: nil
-)
-
-print("Melt quote ID: \(meltQuote.id())")
-print("Fee reserve: \(meltQuote.feeReserve().value)")
 ```
 
 ### Send Tokens
@@ -197,12 +177,38 @@ let receivedAmount = try await wallet.receive(
 print("Received: \(receivedAmount.value) sats")
 ```
 
-### Check Proof States
+### Manage Transactions
 
 ```swift
-let states: [ProofState] = [.unspent, .spent, .pending]
-let proofs = try await wallet.getProofsByStates(states: states)
-print("Found \(proofs.count) proofs")
+// List all transactions
+let allTransactions = try await wallet.listTransactions(direction: nil)
+
+// List only incoming transactions (mint, receive)
+let incomingTransactions = try await wallet.listTransactions(direction: .incoming)
+
+// List only outgoing transactions (send, melt)
+let outgoingTransactions = try await wallet.listTransactions(direction: .outgoing)
+
+// Get a specific transaction by ID
+let transactionId = TransactionId(hex: "your_transaction_id_here")
+let transaction = try await wallet.getTransaction(id: transactionId)
+
+// Revert a transaction if needed
+try await wallet.revertTransaction(id: transactionId)
+```
+
+### Melt Tokens (Lightning Payments)
+
+```swift
+let invoice = "lnbc1000n1..." // Lightning invoice
+let meltQuote = try await wallet.meltQuote(
+    request: invoice,
+    options: nil
+)
+
+// Pay the Lightning invoice
+let melted = try await wallet.melt(quoteId: meltQuote.id())
+print("Payment sent, preimage: \(melted.preimage ?? "None")")
 ```
 
 ### Error Handling
@@ -210,7 +216,7 @@ print("Found \(proofs.count) proofs")
 ```swift
 do {
     let wallet = try await Wallet(
-        mintUrl: "invalid-url",
+        mintUrl: "https://mint.example.com/",
         unit: CurrencyUnit.sat,
         mnemonic: mnemonic,
         config: config
@@ -219,216 +225,64 @@ do {
     switch error {
     case .generic(let message):
         print("CDK Error: \(message)")
+    case .insufficientFunds(let message):
+        print("Insufficient funds: \(message)")
+    case .network(let message):
+        print("Network error: \(message)")
     }
 } catch {
     print("Unexpected error: \(error)")
 }
 ```
 
-### Working with Different Currency Units
+## Contributing
 
-```swift
-// Satoshis (most common)
-let satWallet = try await Wallet(
-    mintUrl: "https://mint.example.com/",
-    unit: CurrencyUnit.sat,
-    mnemonic: mnemonic,
-    config: config
-)
+We welcome contributions! If you're interested in contributing to the development of CDK Swift:
 
-// Millisatoshis
-let msatWallet = try await Wallet(
-    mintUrl: "https://mint.example.com/",
-    unit: CurrencyUnit.msat,
-    mnemonic: mnemonic,
-    config: config
-)
+1. **Fork and clone** the repository
+2. **Set up your development environment** (see Development section below)
+3. **Make your changes** and ensure tests pass
+4. **Submit a pull request**
 
-// Custom currency
-let customWallet = try await Wallet(
-    mintUrl: "https://mint.example.com/",
-    unit: CurrencyUnit.custom(unit: "USD"),
-    mnemonic: mnemonic,
-    config: config
-)
-```
+### Development Setup (For Contributors)
 
-## Building from Source
-
-### Prerequisites
-
+Prerequisites:
 - [Rust](https://rustup.rs/) with cargo
 - Xcode and Xcode Command Line Tools
 - [Just](https://github.com/casey/just) task runner (optional but recommended)
 
-### Setup
-
-1. Clone the CDK repository:
-   ```bash
-   git clone https://github.com/cashubtc/cdk.git
-   ```
-
-2. Clone this repository:
-   ```bash
-   git clone https://github.com/cashubtc/cdk-swift.git
-   cd cdk-swift
-   ```
-
-3. Generate Swift bindings:
-   ```bash
-   just generate
-   # or
-   ./generate-bindings.sh
-   ```
-
-### Available Commands
-
+Setup:
 ```bash
-# Generate Swift bindings from CDK FFI
+# Clone the CDK repository (required for development)
+git clone https://github.com/cashubtc/cdk.git
+
+# Clone this repository
+git clone https://github.com/cashubtc/cdk-swift.git
+cd cdk-swift
+
+# Generate Swift bindings and build
 just generate
-
-# Build XCFramework for all platforms
-just build
-
-# Build for native platform only (faster for development)
-just build-native  
-
-# Run all tests
-just test
-
-# Clean all build artifacts
-just clean
-
-# Check prerequisites
-just check-tools
-just check-cdk
-
-# Show project information
-just info
-```
-
-### Environment Variables
-
-- `CDK_DIR`: Path to the CDK repository (default: `../cdk`)
-
-### Verify Your Setup
-
-After building, you can verify everything works correctly:
-
-```bash
-# Run the verification script
-swift run --package-path . -c release --target CashuDevKit verify-setup.swift
-
-# Or run the tests
+just build-native
 just test
 ```
-
-## Project Structure
-
-```
-cdk-swift/
-├── Sources/
-│   ├── CashuDevKit/           # Swift bindings
-│   │   └── CashuDevKit.swift  # Generated Swift code
-│   └── CashuDevKitFFI/        # FFI bridge
-│       ├── CashuDevKitFFI.h   # C header
-│       └── module.modulemap   # Module map
-├── Tests/                     # Swift tests
-├── Package.swift              # Swift Package Manager
-├── generate-bindings.sh       # Bindings generation script
-└── justfile                   # Build tasks
-```
-
-## Development Workflow
-
-1. **Generate bindings** after CDK changes:
-   ```bash
-   just generate
-   ```
-
-2. **Build and test** your changes:
-   ```bash
-   just build-native
-   just test
-   ```
-
-3. **For full cross-platform build**:
-   ```bash
-   just build
-   ```
-
-## Releasing
-
-### Automated Releases (Recommended)
-
-1. **Create and push a tag**:
-   ```bash
-   git tag v0.1.0
-   git push origin v0.1.0
-   ```
-
-2. **GitHub Actions will automatically**:
-   - Build the XCFramework for all platforms
-   - Create a GitHub release with the XCFramework asset
-   - Update Package.swift with the remote binary target
-   - Calculate and include the checksum
-
-### Manual Releases
-
-1. **Build the XCFramework**:
-   ```bash
-   just build
-   ```
-
-2. **Create the release**:
-   ```bash
-   ./create-release.sh v0.1.0
-   ```
-
-3. **Follow the script instructions** to complete the release process
 
 ## Troubleshooting
 
-### "Fatal error adding the package" or Binary target issues
+### Package Installation Issues
 
-If you encounter issues with binary targets:
+If you encounter "Fatal error adding the package" or binary target issues:
 
-1. **For released versions**: Use the remote package installation as described in [Installation](#installation). The package automatically downloads the pre-built XCFramework.
+1. **Verify you're using a valid release version** from: https://github.com/cashubtc/cdk-swift/releases
+2. **Clean Xcode's package cache**: Xcode → File → Packages → Reset Package Caches
+3. **Try restarting Xcode** and re-adding the package
 
-2. **For development/unreleased versions**: Use the local development setup:
-   ```bash
-   git clone https://github.com/cashubtc/cdk-swift.git
-   cd cdk-swift
-   just build
-   ```
+### Module Import Errors
 
-3. **Verify the release exists**: Check that you're using a valid released version at: https://github.com/cashubtc/cdk-swift/releases
+If you see "Module not found" errors:
 
-### "Undefined symbols" or linking errors
-
-If you encounter linking errors:
-
-1. **Make sure all build steps completed successfully**:
-   ```bash
-   just clean
-   just build
-   ```
-
-2. **Verify your CDK directory is properly set**:
-   ```bash
-   export CDK_DIR=/path/to/your/cdk
-   just check-cdk
-   ```
-
-3. **Check platform compatibility**:
-   ```bash
-   # Verify XCFramework contains your target platform
-   xcodebuild -showBuildSettings -project YourProject.xcodeproj
-   ```
-
-### "Module not found" errors
-
-Ensure you've added both the package dependency and target dependency correctly in your `Package.swift` or Xcode project.
+1. **Verify the package is properly added** to your target dependencies
+2. **Ensure you're importing the correct module name**: `import CashuDevKit`
+3. **Check your deployment target** meets the minimum requirements (iOS 15.0+, macOS 12.0+)
 
 ## License
 

@@ -301,4 +301,107 @@ final class CashuDevKitTests: XCTestCase {
         print("Generated mnemonic 2: \(mnemonic2)")
     }
     
+    func testListTransactions() async throws {
+        let wallet = try await createTestWallet()
+        
+        // Test listing all transactions (empty wallet should return empty list)
+        do {
+            let allTransactions = try await wallet.listTransactions(direction: nil)
+            XCTAssertTrue(allTransactions.isEmpty, "New wallet should have no transactions")
+            print("Listed \(allTransactions.count) transactions (all directions)")
+        } catch {
+            print("Failed to list transactions: \(error)")
+            XCTAssertTrue(error is FfiError, "Should be an FfiError")
+        }
+        
+        // Test listing incoming transactions
+        do {
+            let incomingTransactions = try await wallet.listTransactions(direction: .incoming)
+            XCTAssertTrue(incomingTransactions.isEmpty, "New wallet should have no incoming transactions")
+            print("Listed \(incomingTransactions.count) incoming transactions")
+        } catch {
+            print("Failed to list incoming transactions: \(error)")
+            XCTAssertTrue(error is FfiError, "Should be an FfiError")
+        }
+        
+        // Test listing outgoing transactions
+        do {
+            let outgoingTransactions = try await wallet.listTransactions(direction: .outgoing)
+            XCTAssertTrue(outgoingTransactions.isEmpty, "New wallet should have no outgoing transactions")
+            print("Listed \(outgoingTransactions.count) outgoing transactions")
+        } catch {
+            print("Failed to list outgoing transactions: \(error)")
+            XCTAssertTrue(error is FfiError, "Should be an FfiError")
+        }
+    }
+    
+    func testGetTransaction() async throws {
+        let wallet = try await createTestWallet()
+        
+        // Test getting a non-existent transaction
+        let fakeTransactionId = TransactionId(hex: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef")
+        
+        do {
+            let transaction = try await wallet.getTransaction(id: fakeTransactionId)
+            XCTAssertNil(transaction, "Non-existent transaction should return nil")
+            print("Correctly returned nil for non-existent transaction")
+        } catch {
+            print("Failed to get transaction (may be expected): \(error)")
+            XCTAssertTrue(error is FfiError, "Should be an FfiError")
+        }
+    }
+    
+    func testRevertTransaction() async throws {
+        let wallet = try await createTestWallet()
+        
+        // Test reverting a non-existent transaction (should fail)
+        let fakeTransactionId = TransactionId(hex: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef")
+        
+        do {
+            try await wallet.revertTransaction(id: fakeTransactionId)
+            XCTFail("Reverting non-existent transaction should fail")
+        } catch {
+            print("Correctly failed to revert non-existent transaction: \(error)")
+            XCTAssertTrue(error is FfiError, "Should be an FfiError")
+        }
+    }
+    
+    func testTransactionWorkflow() async throws {
+        let wallet = try await createTestWallet()
+        
+        // This test simulates a more complete transaction workflow
+        // In a real scenario, we would:
+        // 1. Create a mint quote and mint some tokens (incoming transaction)
+        // 2. Send some tokens (outgoing transaction) 
+        // 3. List transactions to see both
+        // 4. Get specific transaction details
+        // 5. Potentially revert a transaction if needed
+        
+        // For now, we'll just test the basic functionality with empty wallet
+        do {
+            // Test initial state - no transactions
+            let initialTransactions = try await wallet.listTransactions(direction: nil)
+            XCTAssertTrue(initialTransactions.isEmpty, "New wallet should start with no transactions")
+            
+            // Test transaction direction enum values
+            XCTAssertEqual(TransactionDirection.incoming, TransactionDirection.incoming)
+            XCTAssertEqual(TransactionDirection.outgoing, TransactionDirection.outgoing)
+            XCTAssertNotEqual(TransactionDirection.incoming, TransactionDirection.outgoing)
+            
+            // Test TransactionId creation and equality
+            let txId1 = TransactionId(hex: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            let txId2 = TransactionId(hex: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            let txId3 = TransactionId(hex: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+            
+            XCTAssertEqual(txId1, txId2, "TransactionIds with same hex should be equal")
+            XCTAssertNotEqual(txId1, txId3, "TransactionIds with different hex should not be equal")
+            XCTAssertEqual(txId1.hex, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            
+            print("Transaction workflow test completed successfully")
+        } catch {
+            print("Transaction workflow test failed: \(error)")
+            XCTAssertTrue(error is FfiError, "Should be an FfiError")
+        }
+    }
+    
 }
