@@ -8,7 +8,7 @@ Swift language bindings for the [Cashu Development Kit (CDK)](https://github.com
 
 ## Installation
 
-### Swift Package Manager
+### Swift Package Manager (Recommended)
 
 Add the following to your `Package.swift`:
 
@@ -38,6 +38,30 @@ targets: [
 3. Enter the repository URL: `https://github.com/cashubtc/cdk-swift.git`
 4. Select the version you want to use
 5. Add `CashuDevKit` to your target
+
+### Local Development Setup
+
+For contributors or those who want to build from source:
+
+1. **Clone and build the package locally**:
+   ```bash
+   git clone https://github.com/cashubtc/cdk-swift.git
+   cd cdk-swift
+   just build  # or ./build-xcframework.sh
+   ```
+
+2. **Add as a local package dependency** in your `Package.swift`:
+   ```swift
+   dependencies: [
+       .package(path: "/path/to/cdk-swift")
+   ]
+   ```
+
+3. **Or use Xcode's local package integration**:
+   - Open your Xcode project
+   - Go to **File → Add Package Dependencies**
+   - Click **Add Local...** and select the `cdk-swift` directory
+   - Add `CashuDevKit` to your target
 
 ## Supported Platforms
 
@@ -287,6 +311,18 @@ just info
 
 - `CDK_DIR`: Path to the CDK repository (default: `../cdk`)
 
+### Verify Your Setup
+
+After building, you can verify everything works correctly:
+
+```bash
+# Run the verification script
+swift run --package-path . -c release --target CashuDevKit verify-setup.swift
+
+# Or run the tests
+just test
+```
+
 ## Project Structure
 
 ```
@@ -320,6 +356,79 @@ cdk-swift/
    ```bash
    just build
    ```
+
+## Releasing
+
+### Automated Releases (Recommended)
+
+1. **Create and push a tag**:
+   ```bash
+   git tag v0.1.0
+   git push origin v0.1.0
+   ```
+
+2. **GitHub Actions will automatically**:
+   - Build the XCFramework for all platforms
+   - Create a GitHub release with the XCFramework asset
+   - Update Package.swift with the remote binary target
+   - Calculate and include the checksum
+
+### Manual Releases
+
+1. **Build the XCFramework**:
+   ```bash
+   just build
+   ```
+
+2. **Create the release**:
+   ```bash
+   ./create-release.sh v0.1.0
+   ```
+
+3. **Follow the script instructions** to complete the release process
+
+## Troubleshooting
+
+### "Fatal error adding the package" or Binary target issues
+
+If you encounter issues with binary targets:
+
+1. **For released versions**: Use the remote package installation as described in [Installation](#installation). The package automatically downloads the pre-built XCFramework.
+
+2. **For development/unreleased versions**: Use the local development setup:
+   ```bash
+   git clone https://github.com/cashubtc/cdk-swift.git
+   cd cdk-swift
+   just build
+   ```
+
+3. **Verify the release exists**: Check that you're using a valid released version at: https://github.com/cashubtc/cdk-swift/releases
+
+### "Undefined symbols" or linking errors
+
+If you encounter linking errors:
+
+1. **Make sure all build steps completed successfully**:
+   ```bash
+   just clean
+   just build
+   ```
+
+2. **Verify your CDK directory is properly set**:
+   ```bash
+   export CDK_DIR=/path/to/your/cdk
+   just check-cdk
+   ```
+
+3. **Check platform compatibility**:
+   ```bash
+   # Verify XCFramework contains your target platform
+   xcodebuild -showBuildSettings -project YourProject.xcodeproj
+   ```
+
+### "Module not found" errors
+
+Ensure you've added both the package dependency and target dependency correctly in your `Package.swift` or Xcode project.
 
 ## License
 

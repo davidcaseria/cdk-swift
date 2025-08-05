@@ -17,15 +17,11 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "cdkFFI",
-            path: "cdkFFI.xcframework"
-        ),
-        .systemLibrary(
-            name: "CashuDevKitFFI",
-            path: "Sources/CashuDevKitFFI"
+            path: "./cdkFFI.xcframework"
         ),
         .target(
             name: "CashuDevKit",
-            dependencies: ["CashuDevKitFFI", "cdkFFI"],
+            dependencies: ["cdkFFI"],
             linkerSettings: [
                 .linkedLibrary("resolv")
             ]
