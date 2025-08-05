@@ -1747,6 +1747,21 @@ public protocol WalletProtocol: AnyObject, Sendable {
     func getProofsByStates(states: [ProofState]) async throws  -> [Proof]
     
     /**
+     * Get transaction by ID
+     */
+    func getTransaction(id: TransactionId) async throws  -> Transaction?
+    
+    /**
+     * Get unspent auth proofs
+     */
+    func getUnspentAuthProofs() async throws  -> [AuthProof]
+    
+    /**
+     * List transactions
+     */
+    func listTransactions(direction: TransactionDirection?) async throws  -> [Transaction]
+    
+    /**
      * Melt tokens
      */
     func melt(quoteId: String) async throws  -> Melted
@@ -1760,6 +1775,11 @@ public protocol WalletProtocol: AnyObject, Sendable {
      * Mint tokens
      */
     func mint(quoteId: String, amountSplitTarget: SplitTarget, spendingConditions: SpendingConditions?) async throws  -> [Proof]
+    
+    /**
+     * Mint blind auth tokens
+     */
+    func mintBlindAuth(amount: Amount) async throws  -> [Proof]
     
     /**
      * Get a mint quote
@@ -1787,9 +1807,29 @@ public protocol WalletProtocol: AnyObject, Sendable {
     func receiveProofs(proofs: [Proof], options: ReceiveOptions, memo: String?) async throws  -> Amount
     
     /**
+     * Refresh access token using the stored refresh token
+     */
+    func refreshAccessToken() async throws 
+    
+    /**
      * Restore wallet from seed
      */
     func restore() async throws  -> Amount
+    
+    /**
+     * Revert a transaction
+     */
+    func revertTransaction(id: TransactionId) async throws 
+    
+    /**
+     * Set Clear Auth Token (CAT) for authentication
+     */
+    func setCat(cat: String) async throws 
+    
+    /**
+     * Set refresh token for authentication
+     */
+    func setRefreshToken(refreshToken: String) async throws 
     
     /**
      * Swap proofs
@@ -1957,6 +1997,66 @@ open func getProofsByStates(states: [ProofState])async throws  -> [Proof]  {
 }
     
     /**
+     * Get transaction by ID
+     */
+open func getTransaction(id: TransactionId)async throws  -> Transaction?  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_get_transaction(
+                    self.uniffiClonePointer(),
+                    FfiConverterTypeTransactionId_lower(id)
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_rust_buffer,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_rust_buffer,
+            freeFunc: ffi_cdk_ffi_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterOptionTypeTransaction.lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
+     * Get unspent auth proofs
+     */
+open func getUnspentAuthProofs()async throws  -> [AuthProof]  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_get_unspent_auth_proofs(
+                    self.uniffiClonePointer()
+                    
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_rust_buffer,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_rust_buffer,
+            freeFunc: ffi_cdk_ffi_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterSequenceTypeAuthProof.lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
+     * List transactions
+     */
+open func listTransactions(direction: TransactionDirection?)async throws  -> [Transaction]  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_list_transactions(
+                    self.uniffiClonePointer(),
+                    FfiConverterOptionTypeTransactionDirection.lower(direction)
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_rust_buffer,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_rust_buffer,
+            freeFunc: ffi_cdk_ffi_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterSequenceTypeTransaction.lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
      * Melt tokens
      */
 open func melt(quoteId: String)async throws  -> Melted  {
@@ -2006,6 +2106,26 @@ open func mint(quoteId: String, amountSplitTarget: SplitTarget, spendingConditio
                 uniffi_cdk_ffi_fn_method_wallet_mint(
                     self.uniffiClonePointer(),
                     FfiConverterString.lower(quoteId),FfiConverterTypeSplitTarget_lower(amountSplitTarget),FfiConverterOptionTypeSpendingConditions.lower(spendingConditions)
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_rust_buffer,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_rust_buffer,
+            freeFunc: ffi_cdk_ffi_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterSequenceTypeProof.lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
+     * Mint blind auth tokens
+     */
+open func mintBlindAuth(amount: Amount)async throws  -> [Proof]  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_mint_blind_auth(
+                    self.uniffiClonePointer(),
+                    FfiConverterTypeAmount_lower(amount)
                 )
             },
             pollFunc: ffi_cdk_ffi_rust_future_poll_rust_buffer,
@@ -2107,6 +2227,26 @@ open func receiveProofs(proofs: [Proof], options: ReceiveOptions, memo: String?)
 }
     
     /**
+     * Refresh access token using the stored refresh token
+     */
+open func refreshAccessToken()async throws   {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_refresh_access_token(
+                    self.uniffiClonePointer()
+                    
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_void,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_void,
+            freeFunc: ffi_cdk_ffi_rust_future_free_void,
+            liftFunc: { $0 },
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
      * Restore wallet from seed
      */
 open func restore()async throws  -> Amount  {
@@ -2122,6 +2262,66 @@ open func restore()async throws  -> Amount  {
             completeFunc: ffi_cdk_ffi_rust_future_complete_rust_buffer,
             freeFunc: ffi_cdk_ffi_rust_future_free_rust_buffer,
             liftFunc: FfiConverterTypeAmount_lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
+     * Revert a transaction
+     */
+open func revertTransaction(id: TransactionId)async throws   {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_revert_transaction(
+                    self.uniffiClonePointer(),
+                    FfiConverterTypeTransactionId_lower(id)
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_void,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_void,
+            freeFunc: ffi_cdk_ffi_rust_future_free_void,
+            liftFunc: { $0 },
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
+     * Set Clear Auth Token (CAT) for authentication
+     */
+open func setCat(cat: String)async throws   {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_set_cat(
+                    self.uniffiClonePointer(),
+                    FfiConverterString.lower(cat)
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_void,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_void,
+            freeFunc: ffi_cdk_ffi_rust_future_free_void,
+            liftFunc: { $0 },
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
+     * Set refresh token for authentication
+     */
+open func setRefreshToken(refreshToken: String)async throws   {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_set_refresh_token(
+                    self.uniffiClonePointer(),
+                    FfiConverterString.lower(refreshToken)
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_void,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_void,
+            freeFunc: ffi_cdk_ffi_rust_future_free_void,
+            liftFunc: { $0 },
             errorHandler: FfiConverterTypeFfiError_lift
         )
 }
@@ -2354,6 +2554,119 @@ public func FfiConverterTypeAmount_lift(_ buf: RustBuffer) throws -> Amount {
 #endif
 public func FfiConverterTypeAmount_lower(_ value: Amount) -> RustBuffer {
     return FfiConverterTypeAmount.lower(value)
+}
+
+
+/**
+ * FFI-compatible AuthProof
+ */
+public struct AuthProof {
+    /**
+     * Keyset ID
+     */
+    public var keysetId: String
+    /**
+     * Secret message
+     */
+    public var secret: String
+    /**
+     * Unblinded signature (C)
+     */
+    public var c: String
+    /**
+     * Y value (hash_to_curve of secret)
+     */
+    public var y: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * Keyset ID
+         */keysetId: String, 
+        /**
+         * Secret message
+         */secret: String, 
+        /**
+         * Unblinded signature (C)
+         */c: String, 
+        /**
+         * Y value (hash_to_curve of secret)
+         */y: String) {
+        self.keysetId = keysetId
+        self.secret = secret
+        self.c = c
+        self.y = y
+    }
+}
+
+#if compiler(>=6)
+extension AuthProof: Sendable {}
+#endif
+
+
+extension AuthProof: Equatable, Hashable {
+    public static func ==(lhs: AuthProof, rhs: AuthProof) -> Bool {
+        if lhs.keysetId != rhs.keysetId {
+            return false
+        }
+        if lhs.secret != rhs.secret {
+            return false
+        }
+        if lhs.c != rhs.c {
+            return false
+        }
+        if lhs.y != rhs.y {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(keysetId)
+        hasher.combine(secret)
+        hasher.combine(c)
+        hasher.combine(y)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeAuthProof: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AuthProof {
+        return
+            try AuthProof(
+                keysetId: FfiConverterString.read(from: &buf), 
+                secret: FfiConverterString.read(from: &buf), 
+                c: FfiConverterString.read(from: &buf), 
+                y: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: AuthProof, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.keysetId, into: &buf)
+        FfiConverterString.write(value.secret, into: &buf)
+        FfiConverterString.write(value.c, into: &buf)
+        FfiConverterString.write(value.y, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAuthProof_lift(_ buf: RustBuffer) throws -> AuthProof {
+    return try FfiConverterTypeAuthProof.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeAuthProof_lower(_ value: AuthProof) -> RustBuffer {
+    return FfiConverterTypeAuthProof.lower(value)
 }
 
 
@@ -3718,6 +4031,260 @@ public func FfiConverterTypeSupportedSettings_lower(_ value: SupportedSettings) 
 
 
 /**
+ * FFI-compatible Transaction
+ */
+public struct Transaction {
+    /**
+     * Transaction ID
+     */
+    public var id: TransactionId
+    /**
+     * Mint URL
+     */
+    public var mintUrl: MintUrl
+    /**
+     * Transaction direction
+     */
+    public var direction: TransactionDirection
+    /**
+     * Amount
+     */
+    public var amount: Amount
+    /**
+     * Fee
+     */
+    public var fee: Amount
+    /**
+     * Currency Unit
+     */
+    public var unit: CurrencyUnit
+    /**
+     * Unix timestamp
+     */
+    public var timestamp: UInt64
+    /**
+     * Memo
+     */
+    public var memo: String?
+    /**
+     * User-defined metadata
+     */
+    public var metadata: [String: String]
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * Transaction ID
+         */id: TransactionId, 
+        /**
+         * Mint URL
+         */mintUrl: MintUrl, 
+        /**
+         * Transaction direction
+         */direction: TransactionDirection, 
+        /**
+         * Amount
+         */amount: Amount, 
+        /**
+         * Fee
+         */fee: Amount, 
+        /**
+         * Currency Unit
+         */unit: CurrencyUnit, 
+        /**
+         * Unix timestamp
+         */timestamp: UInt64, 
+        /**
+         * Memo
+         */memo: String?, 
+        /**
+         * User-defined metadata
+         */metadata: [String: String]) {
+        self.id = id
+        self.mintUrl = mintUrl
+        self.direction = direction
+        self.amount = amount
+        self.fee = fee
+        self.unit = unit
+        self.timestamp = timestamp
+        self.memo = memo
+        self.metadata = metadata
+    }
+}
+
+#if compiler(>=6)
+extension Transaction: Sendable {}
+#endif
+
+
+extension Transaction: Equatable, Hashable {
+    public static func ==(lhs: Transaction, rhs: Transaction) -> Bool {
+        if lhs.id != rhs.id {
+            return false
+        }
+        if lhs.mintUrl != rhs.mintUrl {
+            return false
+        }
+        if lhs.direction != rhs.direction {
+            return false
+        }
+        if lhs.amount != rhs.amount {
+            return false
+        }
+        if lhs.fee != rhs.fee {
+            return false
+        }
+        if lhs.unit != rhs.unit {
+            return false
+        }
+        if lhs.timestamp != rhs.timestamp {
+            return false
+        }
+        if lhs.memo != rhs.memo {
+            return false
+        }
+        if lhs.metadata != rhs.metadata {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(mintUrl)
+        hasher.combine(direction)
+        hasher.combine(amount)
+        hasher.combine(fee)
+        hasher.combine(unit)
+        hasher.combine(timestamp)
+        hasher.combine(memo)
+        hasher.combine(metadata)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeTransaction: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Transaction {
+        return
+            try Transaction(
+                id: FfiConverterTypeTransactionId.read(from: &buf), 
+                mintUrl: FfiConverterTypeMintUrl.read(from: &buf), 
+                direction: FfiConverterTypeTransactionDirection.read(from: &buf), 
+                amount: FfiConverterTypeAmount.read(from: &buf), 
+                fee: FfiConverterTypeAmount.read(from: &buf), 
+                unit: FfiConverterTypeCurrencyUnit.read(from: &buf), 
+                timestamp: FfiConverterUInt64.read(from: &buf), 
+                memo: FfiConverterOptionString.read(from: &buf), 
+                metadata: FfiConverterDictionaryStringString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: Transaction, into buf: inout [UInt8]) {
+        FfiConverterTypeTransactionId.write(value.id, into: &buf)
+        FfiConverterTypeMintUrl.write(value.mintUrl, into: &buf)
+        FfiConverterTypeTransactionDirection.write(value.direction, into: &buf)
+        FfiConverterTypeAmount.write(value.amount, into: &buf)
+        FfiConverterTypeAmount.write(value.fee, into: &buf)
+        FfiConverterTypeCurrencyUnit.write(value.unit, into: &buf)
+        FfiConverterUInt64.write(value.timestamp, into: &buf)
+        FfiConverterOptionString.write(value.memo, into: &buf)
+        FfiConverterDictionaryStringString.write(value.metadata, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTransaction_lift(_ buf: RustBuffer) throws -> Transaction {
+    return try FfiConverterTypeTransaction.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTransaction_lower(_ value: Transaction) -> RustBuffer {
+    return FfiConverterTypeTransaction.lower(value)
+}
+
+
+/**
+ * FFI-compatible TransactionId
+ */
+public struct TransactionId {
+    /**
+     * Hex-encoded transaction ID (64 characters)
+     */
+    public var hex: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * Hex-encoded transaction ID (64 characters)
+         */hex: String) {
+        self.hex = hex
+    }
+}
+
+#if compiler(>=6)
+extension TransactionId: Sendable {}
+#endif
+
+
+extension TransactionId: Equatable, Hashable {
+    public static func ==(lhs: TransactionId, rhs: TransactionId) -> Bool {
+        if lhs.hex != rhs.hex {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(hex)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeTransactionId: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TransactionId {
+        return
+            try TransactionId(
+                hex: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: TransactionId, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.hex, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTransactionId_lift(_ buf: RustBuffer) throws -> TransactionId {
+    return try FfiConverterTypeTransactionId.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTransactionId_lower(_ value: TransactionId) -> RustBuffer {
+    return FfiConverterTypeTransactionId.lower(value)
+}
+
+
+/**
  * Configuration for creating wallets
  */
 public struct WalletConfig {
@@ -4675,6 +5242,85 @@ extension SplitTarget: Equatable, Hashable {}
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
+ * FFI-compatible TransactionDirection
+ */
+
+public enum TransactionDirection {
+    
+    /**
+     * Incoming transaction (i.e., receive or mint)
+     */
+    case incoming
+    /**
+     * Outgoing transaction (i.e., send or melt)
+     */
+    case outgoing
+}
+
+
+#if compiler(>=6)
+extension TransactionDirection: Sendable {}
+#endif
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeTransactionDirection: FfiConverterRustBuffer {
+    typealias SwiftType = TransactionDirection
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TransactionDirection {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        
+        case 1: return .incoming
+        
+        case 2: return .outgoing
+        
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: TransactionDirection, into buf: inout [UInt8]) {
+        switch value {
+        
+        
+        case .incoming:
+            writeInt(&buf, Int32(1))
+        
+        
+        case .outgoing:
+            writeInt(&buf, Int32(2))
+        
+        }
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTransactionDirection_lift(_ buf: RustBuffer) throws -> TransactionDirection {
+    return try FfiConverterTypeTransactionDirection.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeTransactionDirection_lower(_ value: TransactionDirection) -> RustBuffer {
+    return FfiConverterTypeTransactionDirection.lower(value)
+}
+
+
+extension TransactionDirection: Equatable, Hashable {}
+
+
+
+
+
+
+// Note that we don't yet support `indirect` for enums.
+// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
+/**
  * FFI-compatible Witness
  */
 
@@ -4962,6 +5608,30 @@ fileprivate struct FfiConverterOptionTypeSendMemo: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionTypeTransaction: FfiConverterRustBuffer {
+    typealias SwiftType = Transaction?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeTransaction.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeTransaction.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionTypeCurrencyUnit: FfiConverterRustBuffer {
     typealias SwiftType = CurrencyUnit?
 
@@ -5026,6 +5696,30 @@ fileprivate struct FfiConverterOptionTypeSpendingConditions: FfiConverterRustBuf
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterTypeSpendingConditions.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterOptionTypeTransactionDirection: FfiConverterRustBuffer {
+    typealias SwiftType = TransactionDirection?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeTransactionDirection.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeTransactionDirection.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -5206,6 +5900,31 @@ fileprivate struct FfiConverterSequenceTypeAmount: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterSequenceTypeAuthProof: FfiConverterRustBuffer {
+    typealias SwiftType = [AuthProof]
+
+    public static func write(_ value: [AuthProof], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeAuthProof.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [AuthProof] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [AuthProof]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeAuthProof.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterSequenceTypeContactInfo: FfiConverterRustBuffer {
     typealias SwiftType = [ContactInfo]
 
@@ -5248,6 +5967,31 @@ fileprivate struct FfiConverterSequenceTypeSecretKey: FfiConverterRustBuffer {
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             seq.append(try FfiConverterTypeSecretKey.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterSequenceTypeTransaction: FfiConverterRustBuffer {
+    typealias SwiftType = [Transaction]
+
+    public static func write(_ value: [Transaction], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeTransaction.write(item, into: &buf)
+        }
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [Transaction] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [Transaction]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            seq.append(try FfiConverterTypeTransaction.read(from: &buf))
         }
         return seq
     }
@@ -5528,6 +6272,15 @@ private let initializationResult: InitializationResult = {
     if (uniffi_cdk_ffi_checksum_method_wallet_get_proofs_by_states() != 63476) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_cdk_ffi_checksum_method_wallet_get_transaction() != 62811) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_method_wallet_get_unspent_auth_proofs() != 31137) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_method_wallet_list_transactions() != 20673) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_cdk_ffi_checksum_method_wallet_melt() != 33983) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -5535,6 +6288,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_method_wallet_mint() != 61108) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_method_wallet_mint_blind_auth() != 39214) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_method_wallet_mint_quote() != 26291) {
@@ -5552,7 +6308,19 @@ private let initializationResult: InitializationResult = {
     if (uniffi_cdk_ffi_checksum_method_wallet_receive_proofs() != 17448) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_cdk_ffi_checksum_method_wallet_refresh_access_token() != 63251) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_cdk_ffi_checksum_method_wallet_restore() != 48186) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_method_wallet_revert_transaction() != 31115) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_method_wallet_set_cat() != 29016) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_method_wallet_set_refresh_token() != 28616) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_method_wallet_swap() != 54923) {

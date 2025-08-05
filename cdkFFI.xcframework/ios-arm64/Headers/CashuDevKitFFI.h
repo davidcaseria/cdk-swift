@@ -531,6 +531,21 @@ uint64_t uniffi_cdk_ffi_fn_method_wallet_get_mint_info(void*_Nonnull ptr
 uint64_t uniffi_cdk_ffi_fn_method_wallet_get_proofs_by_states(void*_Nonnull ptr, RustBuffer states
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_GET_TRANSACTION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_GET_TRANSACTION
+uint64_t uniffi_cdk_ffi_fn_method_wallet_get_transaction(void*_Nonnull ptr, RustBuffer id
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_GET_UNSPENT_AUTH_PROOFS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_GET_UNSPENT_AUTH_PROOFS
+uint64_t uniffi_cdk_ffi_fn_method_wallet_get_unspent_auth_proofs(void*_Nonnull ptr
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_LIST_TRANSACTIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_LIST_TRANSACTIONS
+uint64_t uniffi_cdk_ffi_fn_method_wallet_list_transactions(void*_Nonnull ptr, RustBuffer direction
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MELT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MELT
 uint64_t uniffi_cdk_ffi_fn_method_wallet_melt(void*_Nonnull ptr, RustBuffer quote_id
@@ -544,6 +559,11 @@ uint64_t uniffi_cdk_ffi_fn_method_wallet_melt_quote(void*_Nonnull ptr, RustBuffe
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MINT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MINT
 uint64_t uniffi_cdk_ffi_fn_method_wallet_mint(void*_Nonnull ptr, RustBuffer quote_id, RustBuffer amount_split_target, RustBuffer spending_conditions
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MINT_BLIND_AUTH
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MINT_BLIND_AUTH
+uint64_t uniffi_cdk_ffi_fn_method_wallet_mint_blind_auth(void*_Nonnull ptr, RustBuffer amount
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MINT_QUOTE
@@ -571,9 +591,29 @@ uint64_t uniffi_cdk_ffi_fn_method_wallet_receive(void*_Nonnull ptr, void*_Nonnul
 uint64_t uniffi_cdk_ffi_fn_method_wallet_receive_proofs(void*_Nonnull ptr, RustBuffer proofs, RustBuffer options, RustBuffer memo
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_REFRESH_ACCESS_TOKEN
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_REFRESH_ACCESS_TOKEN
+uint64_t uniffi_cdk_ffi_fn_method_wallet_refresh_access_token(void*_Nonnull ptr
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_RESTORE
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_RESTORE
 uint64_t uniffi_cdk_ffi_fn_method_wallet_restore(void*_Nonnull ptr
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_REVERT_TRANSACTION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_REVERT_TRANSACTION
+uint64_t uniffi_cdk_ffi_fn_method_wallet_revert_transaction(void*_Nonnull ptr, RustBuffer id
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_SET_CAT
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_SET_CAT
+uint64_t uniffi_cdk_ffi_fn_method_wallet_set_cat(void*_Nonnull ptr, RustBuffer cat
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_SET_REFRESH_TOKEN
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_SET_REFRESH_TOKEN
+uint64_t uniffi_cdk_ffi_fn_method_wallet_set_refresh_token(void*_Nonnull ptr, RustBuffer refresh_token
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_SWAP
@@ -1150,6 +1190,24 @@ uint16_t uniffi_cdk_ffi_checksum_method_wallet_get_proofs_by_states(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_GET_TRANSACTION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_GET_TRANSACTION
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_get_transaction(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_GET_UNSPENT_AUTH_PROOFS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_GET_UNSPENT_AUTH_PROOFS
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_get_unspent_auth_proofs(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_LIST_TRANSACTIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_LIST_TRANSACTIONS
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_list_transactions(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MELT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MELT
 uint16_t uniffi_cdk_ffi_checksum_method_wallet_melt(void
@@ -1165,6 +1223,12 @@ uint16_t uniffi_cdk_ffi_checksum_method_wallet_melt_quote(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MINT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MINT
 uint16_t uniffi_cdk_ffi_checksum_method_wallet_mint(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MINT_BLIND_AUTH
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MINT_BLIND_AUTH
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_mint_blind_auth(void
     
 );
 #endif
@@ -1198,9 +1262,33 @@ uint16_t uniffi_cdk_ffi_checksum_method_wallet_receive_proofs(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_REFRESH_ACCESS_TOKEN
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_REFRESH_ACCESS_TOKEN
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_refresh_access_token(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_RESTORE
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_RESTORE
 uint16_t uniffi_cdk_ffi_checksum_method_wallet_restore(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_REVERT_TRANSACTION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_REVERT_TRANSACTION
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_revert_transaction(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_SET_CAT
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_SET_CAT
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_set_cat(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_SET_REFRESH_TOKEN
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_SET_REFRESH_TOKEN
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_set_refresh_token(void
     
 );
 #endif
