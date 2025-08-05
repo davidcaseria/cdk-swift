@@ -15,13 +15,20 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
+        .binaryTarget(
+            name: "cdkFFI",
+            path: "cdkFFI.xcframework"
+        ),
         .systemLibrary(
             name: "CashuDevKitFFI",
             path: "Sources/CashuDevKitFFI"
         ),
         .target(
             name: "CashuDevKit",
-            dependencies: ["CashuDevKitFFI"]
+            dependencies: ["CashuDevKitFFI", "cdkFFI"],
+            linkerSettings: [
+                .linkedLibrary("resolv")
+            ]
         ),
         .testTarget(
             name: "CashuDevKitTests",
