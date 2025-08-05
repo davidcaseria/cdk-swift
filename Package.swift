@@ -17,7 +17,7 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "cdkFFI",
-            path: "./cdkFFI.xcframework"
+            path: "cdkFFI.xcframework"
         ),
         .target(
             name: "CashuDevKit",

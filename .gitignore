@@ -85,8 +85,8 @@ target/
 Cargo.lock
 
 # XCFramework output
-cdkFFI.xcframework/
-*.xcframework/
+# cdkFFI.xcframework is committed for remote package usage
+# *.xcframework/
 
 # macOS
 .DS_Store
