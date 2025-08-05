@@ -57,7 +57,7 @@ lipo -create \
 log_info "Creating XCFramework (macOS only)..."
 xcodebuild -create-xcframework \
     -library "target/macos/libcdk_ffi.a" \
-    -headers "Sources/$SWIFT_PACKAGE_NAME/Generated/" \
+    -headers "Sources/$SWIFT_PACKAGE_NAME/" \
     -output "$FRAMEWORK_NAME.xcframework"
 
 log_info "Build completed successfully!"

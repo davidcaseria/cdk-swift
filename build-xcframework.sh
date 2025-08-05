@@ -79,7 +79,10 @@ log_info "Building CDK Swift bindings..."
 log_info "Cleaning previous builds..."
 rm -rf target/
 rm -rf "$FRAMEWORK_NAME.xcframework"
-rm -rf Sources/$SWIFT_PACKAGE_NAME/Generated/
+# Clean generated files
+rm -rf Sources/$SWIFT_PACKAGE_NAME/CashuDevKit.swift
+rm -rf Sources/$SWIFT_PACKAGE_NAME/CashuDevKitFFI.h
+rm -rf Sources/$SWIFT_PACKAGE_NAME/CashuDevKitFFI.modulemap
 
 # Add Rust targets
 log_info "Adding Rust targets..."
@@ -87,16 +90,12 @@ for target in "${IOS_TARGETS[@]}" "${MACOS_TARGETS[@]}"; do
     rustup target add "$target"
 done
 
-# Create directories for generated files
-mkdir -p Sources/$SWIFT_PACKAGE_NAME/Generated/
+# Ensure source directory exists
+mkdir -p Sources/$SWIFT_PACKAGE_NAME/
 
 # Generate Swift bindings
 log_info "Generating Swift bindings..."
-CURRENT_DIR=$(pwd)
-cd "$FFI_DIR"
-cargo build --release  # Ensure release build exists
-cargo run --bin uniffi-bindgen generate --library ../../target/release/libcdk_ffi.dylib --language swift --out-dir "$CURRENT_DIR/Sources/$SWIFT_PACKAGE_NAME/Generated/"
-cd - > /dev/null
+bash ./generate-bindings.sh
 
 # Build for all targets
 log_info "Building Rust libraries for all targets..."
@@ -140,16 +139,16 @@ fi
 log_info "Creating XCFramework..."
 xcodebuild -create-xcframework \
     -library "target/ios/libcdk_ffi.a" \
-    -headers "Sources/$SWIFT_PACKAGE_NAME/Generated/" \
+    -headers "Sources/CashuDevKitFFI/" \
     -library "target/ios-simulator/libcdk_ffi.a" \
-    -headers "Sources/$SWIFT_PACKAGE_NAME/Generated/" \
+    -headers "Sources/CashuDevKitFFI/" \
     -library "target/macos/libcdk_ffi.a" \
-    -headers "Sources/$SWIFT_PACKAGE_NAME/Generated/" \
+    -headers "Sources/CashuDevKitFFI/" \
     -output "$FRAMEWORK_NAME.xcframework"
 
 log_info "Build completed successfully!"
 log_info "XCFramework created at: $FRAMEWORK_NAME.xcframework"
-log_info "Swift bindings generated in: Sources/$SWIFT_PACKAGE_NAME/Generated/"
+log_info "Swift bindings generated in: Sources/$SWIFT_PACKAGE_NAME/"
 
 # Run tests if requested
 if [ "$1" == "--test" ]; then

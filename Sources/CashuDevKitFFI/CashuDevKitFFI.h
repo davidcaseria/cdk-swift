@@ -486,11 +486,6 @@ RustBuffer uniffi_cdk_ffi_fn_method_token_mint_url(void*_Nonnull ptr, RustCallSt
 RustBuffer uniffi_cdk_ffi_fn_method_token_proofs_simple(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 #endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_TOKEN_TO_STRING
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_TOKEN_TO_STRING
-RustBuffer uniffi_cdk_ffi_fn_method_token_to_string(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
-);
-#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_TOKEN_TO_V3_STRING
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_TOKEN_TO_V3_STRING
 RustBuffer uniffi_cdk_ffi_fn_method_token_to_v3_string(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
@@ -518,7 +513,7 @@ void uniffi_cdk_ffi_fn_free_wallet(void*_Nonnull ptr, RustCallStatus *_Nonnull o
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CONSTRUCTOR_WALLET_NEW
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CONSTRUCTOR_WALLET_NEW
-uint64_t uniffi_cdk_ffi_fn_constructor_wallet_new(RustBuffer mint_url, RustBuffer unit, RustBuffer seed, RustBuffer target_proof_count
+uint64_t uniffi_cdk_ffi_fn_constructor_wallet_new(RustBuffer mint_url, RustBuffer unit, RustBuffer mnemonic, RustBuffer config
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_CHECK_PROOFS_SPENT
@@ -611,50 +606,9 @@ RustBuffer uniffi_cdk_ffi_fn_method_wallet_unit(void*_Nonnull ptr, RustCallStatu
 uint64_t uniffi_cdk_ffi_fn_method_wallet_verify_token_dleq(void*_Nonnull ptr, void*_Nonnull token
 );
 #endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_WALLETBUILDER
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_WALLETBUILDER
-void*_Nonnull uniffi_cdk_ffi_fn_clone_walletbuilder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FREE_WALLETBUILDER
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FREE_WALLETBUILDER
-void uniffi_cdk_ffi_fn_free_walletbuilder(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CONSTRUCTOR_WALLETBUILDER_NEW
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CONSTRUCTOR_WALLETBUILDER_NEW
-void*_Nonnull uniffi_cdk_ffi_fn_constructor_walletbuilder_new(RustCallStatus *_Nonnull out_status
-    
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLETBUILDER_BUILD
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLETBUILDER_BUILD
-uint64_t uniffi_cdk_ffi_fn_method_walletbuilder_build(void*_Nonnull ptr
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLETBUILDER_MINT_URL
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLETBUILDER_MINT_URL
-void*_Nonnull uniffi_cdk_ffi_fn_method_walletbuilder_mint_url(void*_Nonnull ptr, RustBuffer mint_url, RustCallStatus *_Nonnull out_status
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLETBUILDER_SEED
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLETBUILDER_SEED
-void*_Nonnull uniffi_cdk_ffi_fn_method_walletbuilder_seed(void*_Nonnull ptr, RustBuffer seed, RustCallStatus *_Nonnull out_status
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLETBUILDER_TARGET_PROOF_COUNT
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLETBUILDER_TARGET_PROOF_COUNT
-void*_Nonnull uniffi_cdk_ffi_fn_method_walletbuilder_target_proof_count(void*_Nonnull ptr, uint32_t count, RustCallStatus *_Nonnull out_status
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLETBUILDER_UNIT
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLETBUILDER_UNIT
-void*_Nonnull uniffi_cdk_ffi_fn_method_walletbuilder_unit(void*_Nonnull ptr, RustBuffer unit, RustCallStatus *_Nonnull out_status
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_GENERATE_SEED
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_GENERATE_SEED
-RustBuffer uniffi_cdk_ffi_fn_func_generate_seed(RustCallStatus *_Nonnull out_status
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_GENERATE_MNEMONIC
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_GENERATE_MNEMONIC
+RustBuffer uniffi_cdk_ffi_fn_func_generate_mnemonic(RustCallStatus *_Nonnull out_status
     
 );
 #endif
@@ -938,9 +892,9 @@ void ffi_cdk_ffi_rust_future_free_void(uint64_t handle
 void ffi_cdk_ffi_rust_future_complete_void(uint64_t handle, RustCallStatus *_Nonnull out_status
 );
 #endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_GENERATE_SEED
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_GENERATE_SEED
-uint16_t uniffi_cdk_ffi_checksum_func_generate_seed(void
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_GENERATE_MNEMONIC
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_GENERATE_MNEMONIC
+uint16_t uniffi_cdk_ffi_checksum_func_generate_mnemonic(void
     
 );
 #endif
@@ -1160,12 +1114,6 @@ uint16_t uniffi_cdk_ffi_checksum_method_token_proofs_simple(void
     
 );
 #endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_TOKEN_TO_STRING
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_TOKEN_TO_STRING
-uint16_t uniffi_cdk_ffi_checksum_method_token_to_string(void
-    
-);
-#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_TOKEN_TO_V3_STRING
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_TOKEN_TO_V3_STRING
 uint16_t uniffi_cdk_ffi_checksum_method_token_to_v3_string(void
@@ -1292,36 +1240,6 @@ uint16_t uniffi_cdk_ffi_checksum_method_wallet_verify_token_dleq(void
     
 );
 #endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLETBUILDER_BUILD
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLETBUILDER_BUILD
-uint16_t uniffi_cdk_ffi_checksum_method_walletbuilder_build(void
-    
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLETBUILDER_MINT_URL
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLETBUILDER_MINT_URL
-uint16_t uniffi_cdk_ffi_checksum_method_walletbuilder_mint_url(void
-    
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLETBUILDER_SEED
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLETBUILDER_SEED
-uint16_t uniffi_cdk_ffi_checksum_method_walletbuilder_seed(void
-    
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLETBUILDER_TARGET_PROOF_COUNT
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLETBUILDER_TARGET_PROOF_COUNT
-uint16_t uniffi_cdk_ffi_checksum_method_walletbuilder_target_proof_count(void
-    
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLETBUILDER_UNIT
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLETBUILDER_UNIT
-uint16_t uniffi_cdk_ffi_checksum_method_walletbuilder_unit(void
-    
-);
-#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_CONSTRUCTOR_TOKEN_FROM_STRING
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_CONSTRUCTOR_TOKEN_FROM_STRING
 uint16_t uniffi_cdk_ffi_checksum_constructor_token_from_string(void
@@ -1331,12 +1249,6 @@ uint16_t uniffi_cdk_ffi_checksum_constructor_token_from_string(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_CONSTRUCTOR_WALLET_NEW
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_CONSTRUCTOR_WALLET_NEW
 uint16_t uniffi_cdk_ffi_checksum_constructor_wallet_new(void
-    
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_CONSTRUCTOR_WALLETBUILDER_NEW
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_CONSTRUCTOR_WALLETBUILDER_NEW
-uint16_t uniffi_cdk_ffi_checksum_constructor_walletbuilder_new(void
     
 );
 #endif

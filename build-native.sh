@@ -47,12 +47,9 @@ cargo build --release
 cd - > /dev/null
 
 # Generate Swift bindings if they don't exist
-if [ ! -f "Sources/$SWIFT_PACKAGE_NAME/Generated/CashuDevKitFFI.h" ]; then
+if [ ! -f "Sources/CashuDevKitFFI/CashuDevKitFFI.h" ]; then
     log_info "Generating Swift bindings..."
-    CURRENT_DIR=$(pwd)
-    cd "$FFI_DIR" 
-    cargo run --bin uniffi-bindgen generate --library ../../target/release/libcdk_ffi.dylib --language swift --out-dir "$CURRENT_DIR/Sources/$SWIFT_PACKAGE_NAME/Generated/"
-    cd - > /dev/null
+    bash ./generate-bindings.sh
 fi
 
 # Create directories for frameworks
@@ -61,8 +58,8 @@ mkdir -p target/native/Headers/
 # Copy native library and headers
 log_info "Copying native library and headers..."
 cp "$FFI_DIR/../../target/release/libcdk_ffi.a" "target/native/libcdk_ffi.a"
-cp "Sources/$SWIFT_PACKAGE_NAME/Generated/CashuDevKitFFI.h" "target/native/Headers/"
-cp "module.modulemap" "target/native/Headers/CashuDevKitFFI.modulemap"
+cp "Sources/CashuDevKitFFI/CashuDevKitFFI.h" "target/native/Headers/"
+cp "Sources/CashuDevKitFFI/module.modulemap" "target/native/Headers/CashuDevKitFFI.modulemap"
 
 # Create XCFramework with just native
 log_info "Creating XCFramework (native only)..."

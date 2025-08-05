@@ -1,5 +1,7 @@
 module CashuDevKitFFI {
     header "CashuDevKitFFI.h"
     export *
-    link "cdk_ffi"
+    use "Darwin"
+    use "_Builtin_stdbool"
+    use "_Builtin_stdint"
 }

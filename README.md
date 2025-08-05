@@ -6,12 +6,6 @@ Swift language bindings for the [Cashu Development Kit (CDK)](https://github.com
 
 `cdk-swift` provides Swift/iOS bindings for CDK, enabling developers to integrate Cashu ecash functionality into their iOS and macOS applications.
 
-## Supported Platforms
-
-- macOS (x86_64 and Apple Silicon)
-- iOS (iPhone - aarch64)
-- iOS Simulator (x86_64 and Apple Silicon)
-
 ## Installation
 
 ### Swift Package Manager
@@ -20,85 +14,128 @@ Add the following to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/yourusername/cdk-swift.git", from: "0.1.0")
+    .package(url: "https://github.com/cashubtc/cdk-swift.git", from: "0.1.0")
 ]
 ```
 
-Or add it through Xcode:
-1. File → Add Package Dependencies
-2. Enter the repository URL
-3. Select the version you want to use
+Then add it to your target dependencies:
+
+```swift
+targets: [
+    .target(
+        name: "YourApp",
+        dependencies: [
+            .product(name: "CashuDevKit", package: "cdk-swift")
+        ]
+    )
+]
+```
+
+### Xcode Integration
+
+1. Open your Xcode project
+2. Go to **File → Add Package Dependencies**
+3. Enter the repository URL: `https://github.com/cashubtc/cdk-swift.git`
+4. Select the version you want to use
+5. Add `CashuDevKit` to your target
+
+## Supported Platforms
+
+- **macOS**: 12.0+ (Intel and Apple Silicon)
+- **iOS**: 15.0+ (Device and Simulator)
+- **Swift**: 5.5+
 
 ## Building from Source
 
-1. Clone this repository
-2. Ensure you have Rust installed with the required targets
-3. Run the build script:
-
-```bash
-./build-xcframework.sh
-```
-
-This will:
-- Generate Swift bindings from the CDK FFI crate
-- Build Rust libraries for all supported platforms
-- Create a universal XCFramework
-- Run tests (if `--test` flag is provided)
-
-## Usage
-
-```swift
-import CashuDevKit
-
-// Create a wallet
-let wallet = try Wallet(mintUrl: "https://mint.example.com")
-
-// Generate a mint quote
-let mintQuote = try await wallet.createMintQuote(amount: Amount(value: 1000))
-
-// Create a melt quote
-let meltQuote = try await wallet.createMeltQuote(request: "lnbc...")
-
-// Send tokens
-let sendOptions = SendOptions()
-let token = try await wallet.send(amount: Amount(value: 500), options: sendOptions)
-
-// Receive tokens
-let receiveOptions = ReceiveOptions()
-try await wallet.receive(token: token, options: receiveOptions)
-```
-
-## Requirements
-
-- Swift 5.5+
-- iOS 15.0+ / macOS 12.0+
-- Xcode 13.0+
-
-## Development
-
 ### Prerequisites
 
-- Rust (with `rustup`)
+- [Rust](https://rustup.rs/) with cargo
 - Xcode and Xcode Command Line Tools
-- Swift Package Manager
+- [Just](https://github.com/casey/just) task runner (optional but recommended)
 
-### Building
+### Setup
 
-The build process requires the CDK FFI crate to be available at `../cdk/crates/cdk-ffi`. Make sure you have cloned the CDK repository alongside this one.
+1. Clone the CDK repository:
+   ```bash
+   git clone https://github.com/cashubtc/cdk.git
+   ```
 
-### Testing
+2. Clone this repository:
+   ```bash
+   git clone https://github.com/cashubtc/cdk-swift.git
+   cd cdk-swift
+   ```
 
-Run tests with:
+3. Generate Swift bindings:
+   ```bash
+   just generate
+   # or
+   ./generate-bindings.sh
+   ```
+
+### Available Commands
 
 ```bash
-swift test
+# Generate Swift bindings from CDK FFI
+just generate
+
+# Build XCFramework for all platforms
+just build
+
+# Build for native platform only (faster for development)
+just build-native  
+
+# Run all tests
+just test
+
+# Clean all build artifacts
+just clean
+
+# Check prerequisites
+just check-tools
+just check-cdk
+
+# Show project information
+just info
 ```
 
-Or run the build script with tests:
+### Environment Variables
 
-```bash
-./build-xcframework.sh --test
+- `CDK_DIR`: Path to the CDK repository (default: `../cdk`)
+
+## Project Structure
+
 ```
+cdk-swift/
+├── Sources/
+│   ├── CashuDevKit/           # Swift bindings
+│   │   └── CashuDevKit.swift  # Generated Swift code
+│   └── CashuDevKitFFI/        # FFI bridge
+│       ├── CashuDevKitFFI.h   # C header
+│       └── module.modulemap   # Module map
+├── Tests/                     # Swift tests
+├── Package.swift              # Swift Package Manager
+├── generate-bindings.sh       # Bindings generation script
+└── justfile                   # Build tasks
+```
+
+## Development Workflow
+
+1. **Generate bindings** after CDK changes:
+   ```bash
+   just generate
+   ```
+
+2. **Build and test** your changes:
+   ```bash
+   just build-native
+   just test
+   ```
+
+3. **For full cross-platform build**:
+   ```bash
+   just build
+   ```
 
 ## License
 

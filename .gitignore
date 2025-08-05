@@ -84,9 +84,6 @@ iOSInjectionProject/
 target/
 Cargo.lock
 
-# Generated files
-Sources/CashuDevKit/Generated/
-
 # XCFramework output
 cdkFFI.xcframework/
 *.xcframework/

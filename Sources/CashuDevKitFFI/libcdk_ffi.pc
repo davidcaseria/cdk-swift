@@ -1,5 +1,0 @@
-Name: cdk_ffi
-Description: CDK FFI library for Cashu Development Kit
-Version: 0.1.0
-Libs: -L${pcfiledir}/../../target/native -lcdk_ffi
-Cflags: -I${pcfiledir}

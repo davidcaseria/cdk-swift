@@ -12,6 +12,11 @@ repo:
  open https://github.com/cashubtc/cdk
 
 [group("Build")]
+[doc("Generate Swift bindings and FFI sources from the CDK crate.")]
+generate:
+ @bash ./generate-bindings.sh
+
+[group("Build")]
 [doc("Build the library with full cross-platform support.")]
 build:
  CDK_DIR={{CDK_DIR}} bash ./build-xcframework.sh
@@ -22,31 +27,21 @@ build-native:
  CDK_DIR={{CDK_DIR}} bash ./build-native.sh
 
 [group("Build")]
-[doc("Generate Swift bindings from the CDK FFI crate.")]
-generate-bindings:
- cd {{CDK_DIR}}/crates/cdk-ffi && cargo build --release
- cd {{CDK_DIR}}/crates/cdk-ffi && cargo run --bin uniffi-bindgen generate --library ../../target/release/libcdk_ffi.dylib --language swift --out-dir $(pwd)/../../cdk-swift/Sources/CashuDevKit/Generated/
-
-[group("Build")]
-[doc("Build the CDK FFI Rust crate.")]
-build-rust:
- cd {{CDK_DIR}}/crates/cdk-ffi && cargo build --release
-
-[group("Build")]
 [doc("Remove all caches and previous builds to start from scratch.")]
 clean:
  rm -rf {{CDK_DIR}}/target/
  rm -rf target/
  rm -rf cdkFFI.xcframework
  rm -rf .build/
- rm -rf Sources/CashuDevKit/Generated/
+ rm -rf Sources/CashuDevKit/*.swift
+ rm -rf Sources/CashuDevKitFFI/
 
 [group("Test")]
-[doc("Run all Swift tests.")]
-test *FILTER:
- @echo "Note: Swift tests currently have linking issues with the generated bindings"
- @echo "The core functionality (Rust library + Swift bindings generation) works correctly"
- @echo "This is a known Swift Package Manager integration challenge"
+[doc("Run all tests (bindings and xcframework).")]
+test:
+ @just test-bindings
+ @just test-xcframework
+ @echo "✅ All tests passed"
 
 [group("Test")]
 [doc("Test that the XCFramework was created successfully.")]
@@ -62,18 +57,13 @@ test-xcframework:
 [doc("Test that Swift bindings were generated successfully.")]
 test-bindings:
  @echo "Testing Swift bindings..."
- @if [ -f "Sources/CashuDevKit/Generated/CashuDevKit.swift" ]; then echo "✅ Swift bindings exist"; else echo "❌ Swift bindings missing"; exit 1; fi
- @if [ -f "Sources/CashuDevKit/Generated/CashuDevKitFFI.h" ]; then echo "✅ C header exists"; else echo "❌ C header missing"; exit 1; fi
+ @if [ -f "Sources/CashuDevKit/CashuDevKit.swift" ]; then echo "✅ Swift bindings exist"; else echo "❌ Swift bindings missing"; exit 1; fi
+ @if [ -f "Sources/CashuDevKitFFI/CashuDevKitFFI.h" ]; then echo "✅ C header exists"; else echo "❌ C header missing"; exit 1; fi
+ @if [ -f "Sources/CashuDevKitFFI/module.modulemap" ]; then echo "✅ Module map exists"; else echo "❌ Module map missing"; exit 1; fi
  @echo "✅ Swift bindings are valid"
  @echo "Generated Swift API includes:"
- @grep -c "public.*func\|public.*class\|public.*struct\|public.*enum" Sources/CashuDevKit/Generated/CashuDevKit.swift | sed 's/^/  - /' | sed 's/$/ public symbols/'
+ @grep -c "public.*func\|public.*class\|public.*struct\|public.*enum" Sources/CashuDevKit/CashuDevKit.swift | sed 's/^/  - /' | sed 's/$/ public symbols/'
 
-[group("Test")]
-[doc("Test that the Rust library compiles and links correctly.")]
-test-rust:
- @echo "Testing Rust library..."
- cd {{CDK_DIR}}/crates/cdk-ffi && cargo check --release
- @if [ -f "{{CDK_DIR}}/target/release/libcdk_ffi.a" ]; then echo "✅ Rust static library built successfully"; else echo "❌ Rust library missing"; exit 1; fi
 
 [group("Development")]
 [doc("Check if all required tools are installed.")]
@@ -113,7 +103,7 @@ info:
  @echo "=================="
  @echo "CDK FFI crate: {{CDK_DIR}}/crates/cdk-ffi"
  @echo "Swift package: $(pwd)"
- @echo "Generated bindings: Sources/CashuDevKit/Generated/"
+ @echo "Generated bindings: Sources/CashuDevKit/"
  @echo ""
  @echo "Environment:"
  @echo "CDK_DIR = {{CDK_DIR}}"
@@ -131,4 +121,4 @@ info:
  @if [ -d "cdkFFI.xcframework" ]; then echo "✅ cdkFFI.xcframework exists"; else echo "❌ cdkFFI.xcframework not found - run 'just build'"; fi
  @echo ""
  @echo "Generated Swift bindings:"
- @if [ -f "Sources/CashuDevKit/Generated/CashuDevKit.swift" ]; then echo "✅ Swift bindings exist"; else echo "❌ Swift bindings not found - run 'just generate-bindings'"; fi
+ @if [ -f "Sources/CashuDevKit/CashuDevKit.swift" ]; then echo "✅ Swift bindings exist"; else echo "❌ Swift bindings not found - run 'just generate'"; fi
