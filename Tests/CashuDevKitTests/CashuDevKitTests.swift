@@ -8,18 +8,24 @@ final class CashuDevKitTests: XCTestCase {
     private let testUnit = CurrencyUnit.sat
     
     private func createTestWalletConfig() -> WalletConfig {
+        return WalletConfig(targetProofCount: nil)
+    }
+    
+    private func createTestDatabase() async throws -> WalletSqliteDatabase {
         let tempDir = NSTemporaryDirectory() + UUID().uuidString
-        return WalletConfig(workDir: tempDir, targetProofCount: nil)
+        return try await WalletSqliteDatabase(workDir: tempDir)
     }
     
     private func createTestWallet() async throws -> Wallet {
         let config = createTestWalletConfig()
         let mnemonic = try generateMnemonic()
+        let db = try await createTestDatabase()
         
-        return try await Wallet(
+        return try Wallet(
             mintUrl: testMintUrl,
             unit: testUnit,
             mnemonic: mnemonic,
+            db: db,
             config: config
         )
     }
@@ -61,7 +67,7 @@ final class CashuDevKitTests: XCTestCase {
         let amount = Amount(value: 1000) // 1000 sats
         
         do {
-            let quote = try await wallet.mintQuote(amount: amount, description: "Test mint quote")
+            let quote = try await wallet.mintQuote(amount: amount, description: nil)
             
             // Verify quote properties
             XCTAssertNotNil(quote)
@@ -223,27 +229,32 @@ final class CashuDevKitTests: XCTestCase {
     }
     
     func testWalletConfigCreation() throws {
-        let tempDir = NSTemporaryDirectory() + "test-wallet"
-        let config = WalletConfig(workDir: tempDir, targetProofCount: 50)
-        
-        XCTAssertEqual(config.workDir, tempDir)
+        let config = WalletConfig(targetProofCount: 50)
         XCTAssertEqual(config.targetProofCount, 50)
         
         // Test with nil target proof count
-        let config2 = WalletConfig(workDir: tempDir, targetProofCount: nil)
+        let config2 = WalletConfig(targetProofCount: nil)
         XCTAssertNil(config2.targetProofCount)
+    }
+    
+    func testDatabaseCreation() async throws {
+        let tempDir = NSTemporaryDirectory() + "test-wallet"
+        let db = try await WalletSqliteDatabase(workDir: tempDir)
+        XCTAssertNotNil(db)
     }
     
     func testErrorHandling() async throws {
         // Test wallet creation with invalid mint URL
         let config = createTestWalletConfig()
         let mnemonic = try generateMnemonic()
+        let db = try await createTestDatabase()
         
         do {
-            let _ = try await Wallet(
+            let _ = try Wallet(
                 mintUrl: "invalid-url",
                 unit: testUnit,
                 mnemonic: mnemonic,
+                db: db,
                 config: config
             )
             XCTFail("Should have thrown an error for invalid mint URL")
@@ -366,44 +377,6 @@ final class CashuDevKitTests: XCTestCase {
         }
     }
     
-    func testTransactionWorkflow() async throws {
-        let wallet = try await createTestWallet()
-        
-        // This test simulates a more complete transaction workflow
-        // In a real scenario, we would:
-        // 1. Create a mint quote and mint some tokens (incoming transaction)
-        // 2. Send some tokens (outgoing transaction) 
-        // 3. List transactions to see both
-        // 4. Get specific transaction details
-        // 5. Potentially revert a transaction if needed
-        
-        // For now, we'll just test the basic functionality with empty wallet
-        do {
-            // Test initial state - no transactions
-            let initialTransactions = try await wallet.listTransactions(direction: nil)
-            XCTAssertTrue(initialTransactions.isEmpty, "New wallet should start with no transactions")
-            
-            // Test transaction direction enum values
-            XCTAssertEqual(TransactionDirection.incoming, TransactionDirection.incoming)
-            XCTAssertEqual(TransactionDirection.outgoing, TransactionDirection.outgoing)
-            XCTAssertNotEqual(TransactionDirection.incoming, TransactionDirection.outgoing)
-            
-            // Test TransactionId creation and equality
-            let txId1 = TransactionId(hex: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-            let txId2 = TransactionId(hex: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-            let txId3 = TransactionId(hex: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
-            
-            XCTAssertEqual(txId1, txId2, "TransactionIds with same hex should be equal")
-            XCTAssertNotEqual(txId1, txId3, "TransactionIds with different hex should not be equal")
-            XCTAssertEqual(txId1.hex, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-            
-            print("Transaction workflow test completed successfully")
-        } catch {
-            print("Transaction workflow test failed: \(error)")
-            XCTAssertTrue(error is FfiError, "Should be an FfiError")
-        }
-    }
-    
     func testFullMintingFlow() async throws {
         let wallet = try await createTestWallet()
         
@@ -412,7 +385,7 @@ final class CashuDevKitTests: XCTestCase {
         
         do {
             // Step 1: Create a mint quote
-            let quote = try await wallet.mintQuote(amount: amount, description: "Test full minting flow")
+            let quote = try await wallet.mintQuote(amount: amount, description: nil)
             
             print("Mint quote created:")
             print("  Quote ID: \(quote.id())")
@@ -550,3 +523,4 @@ final class CashuDevKitTests: XCTestCase {
 enum TestError: Error {
     case timeout
 }
+    

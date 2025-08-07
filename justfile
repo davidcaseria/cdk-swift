@@ -37,11 +37,19 @@ clean:
  rm -rf Sources/CashuDevKitFFI/
 
 [group("Test")]
-[doc("Run all tests (bindings and xcframework).")]
+[doc("Run all tests (bindings, xcframework, and Swift tests).")]
 test:
  @just test-bindings
  @just test-xcframework
+ @just test-swift
  @echo "✅ All tests passed"
+
+[group("Test")]
+[doc("Run Swift package tests.")]
+test-swift:
+ @echo "Running Swift tests..."
+ swift test
+ @echo "✅ Swift tests passed"
 
 [group("Test")]
 [doc("Test that the XCFramework was created successfully.")]

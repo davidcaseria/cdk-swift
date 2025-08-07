@@ -2559,21 +2559,17 @@ open class Wallet: WalletProtocol, @unchecked Sendable {
     /**
      * Create a new Wallet from mnemonic
      */
-public convenience init(mintUrl: String, unit: CurrencyUnit, mnemonic: String, db: WalletSqliteDatabase, config: WalletConfig)async throws  {
+public convenience init(mintUrl: String, unit: CurrencyUnit, mnemonic: String, db: WalletSqliteDatabase, config: WalletConfig)throws  {
     let pointer =
-        try  await uniffiRustCallAsync(
-            rustFutureFunc: {
-                uniffi_cdk_ffi_fn_constructor_wallet_new(FfiConverterString.lower(mintUrl),FfiConverterTypeCurrencyUnit_lower(unit),FfiConverterString.lower(mnemonic),FfiConverterTypeWalletSqliteDatabase_lower(db),FfiConverterTypeWalletConfig_lower(config)
-                )
-            },
-            pollFunc: ffi_cdk_ffi_rust_future_poll_pointer,
-            completeFunc: ffi_cdk_ffi_rust_future_complete_pointer,
-            freeFunc: ffi_cdk_ffi_rust_future_free_pointer,
-            liftFunc: FfiConverterTypeWallet_lift,
-            errorHandler: FfiConverterTypeFfiError_lift
-        )
-        
-        .uniffiClonePointer()
+        try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_constructor_wallet_new(
+        FfiConverterString.lower(mintUrl),
+        FfiConverterTypeCurrencyUnit_lower(unit),
+        FfiConverterString.lower(mnemonic),
+        FfiConverterTypeWalletSqliteDatabase_lower(db),
+        FfiConverterTypeWalletConfig_lower(config),$0
+    )
+}
     self.init(unsafeFromRawPointer: pointer)
 }
 
@@ -5557,11 +5553,6 @@ public enum FfiError: Swift.Error {
     case AmountOverflow(message: String)
     
     /**
-     * Invalid amount
-     */
-    case InvalidAmount(message: String)
-    
-    /**
      * Amount error
      */
     case Amount(message: String)
@@ -5597,6 +5588,11 @@ public enum FfiError: Swift.Error {
     case InvalidToken(message: String)
     
     /**
+     * Wallet error
+     */
+    case Wallet(message: String)
+    
+    /**
      * Keyset unknown
      */
     case KeysetUnknown(message: String)
@@ -5607,9 +5603,34 @@ public enum FfiError: Swift.Error {
     case UnitNotSupported(message: String)
     
     /**
-     * Wallet error
+     * Runtime task join error
      */
-    case Wallet(message: String)
+    case RuntimeTaskJoin(message: String)
+    
+    /**
+     * Invalid mnemonic phrase
+     */
+    case InvalidMnemonic(message: String)
+    
+    /**
+     * URL parsing error
+     */
+    case InvalidUrl(message: String)
+    
+    /**
+     * Hex format error
+     */
+    case InvalidHex(message: String)
+    
+    /**
+     * Cryptographic key parsing error
+     */
+    case InvalidCryptographicKey(message: String)
+    
+    /**
+     * Serialization/deserialization error
+     */
+    case Serialization(message: String)
     
 }
 
@@ -5635,35 +5656,35 @@ public struct FfiConverterTypeFfiError: FfiConverterRustBuffer {
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 3: return .InvalidAmount(
+        case 3: return .Amount(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 4: return .Amount(
+        case 4: return .PaymentFailed(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 5: return .PaymentFailed(
+        case 5: return .PaymentPending(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 6: return .PaymentPending(
+        case 6: return .InsufficientFunds(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 7: return .InsufficientFunds(
+        case 7: return .Database(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 8: return .Database(
+        case 8: return .Network(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 9: return .Network(
+        case 9: return .InvalidToken(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 10: return .InvalidToken(
+        case 10: return .Wallet(
             message: try FfiConverterString.read(from: &buf)
         )
         
@@ -5675,7 +5696,27 @@ public struct FfiConverterTypeFfiError: FfiConverterRustBuffer {
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 13: return .Wallet(
+        case 13: return .RuntimeTaskJoin(
+            message: try FfiConverterString.read(from: &buf)
+        )
+        
+        case 14: return .InvalidMnemonic(
+            message: try FfiConverterString.read(from: &buf)
+        )
+        
+        case 15: return .InvalidUrl(
+            message: try FfiConverterString.read(from: &buf)
+        )
+        
+        case 16: return .InvalidHex(
+            message: try FfiConverterString.read(from: &buf)
+        )
+        
+        case 17: return .InvalidCryptographicKey(
+            message: try FfiConverterString.read(from: &buf)
+        )
+        
+        case 18: return .Serialization(
             message: try FfiConverterString.read(from: &buf)
         )
         
@@ -5694,28 +5735,38 @@ public struct FfiConverterTypeFfiError: FfiConverterRustBuffer {
             writeInt(&buf, Int32(1))
         case .AmountOverflow(_ /* message is ignored*/):
             writeInt(&buf, Int32(2))
-        case .InvalidAmount(_ /* message is ignored*/):
-            writeInt(&buf, Int32(3))
         case .Amount(_ /* message is ignored*/):
-            writeInt(&buf, Int32(4))
+            writeInt(&buf, Int32(3))
         case .PaymentFailed(_ /* message is ignored*/):
-            writeInt(&buf, Int32(5))
+            writeInt(&buf, Int32(4))
         case .PaymentPending(_ /* message is ignored*/):
-            writeInt(&buf, Int32(6))
+            writeInt(&buf, Int32(5))
         case .InsufficientFunds(_ /* message is ignored*/):
-            writeInt(&buf, Int32(7))
+            writeInt(&buf, Int32(6))
         case .Database(_ /* message is ignored*/):
-            writeInt(&buf, Int32(8))
+            writeInt(&buf, Int32(7))
         case .Network(_ /* message is ignored*/):
-            writeInt(&buf, Int32(9))
+            writeInt(&buf, Int32(8))
         case .InvalidToken(_ /* message is ignored*/):
+            writeInt(&buf, Int32(9))
+        case .Wallet(_ /* message is ignored*/):
             writeInt(&buf, Int32(10))
         case .KeysetUnknown(_ /* message is ignored*/):
             writeInt(&buf, Int32(11))
         case .UnitNotSupported(_ /* message is ignored*/):
             writeInt(&buf, Int32(12))
-        case .Wallet(_ /* message is ignored*/):
+        case .RuntimeTaskJoin(_ /* message is ignored*/):
             writeInt(&buf, Int32(13))
+        case .InvalidMnemonic(_ /* message is ignored*/):
+            writeInt(&buf, Int32(14))
+        case .InvalidUrl(_ /* message is ignored*/):
+            writeInt(&buf, Int32(15))
+        case .InvalidHex(_ /* message is ignored*/):
+            writeInt(&buf, Int32(16))
+        case .InvalidCryptographicKey(_ /* message is ignored*/):
+            writeInt(&buf, Int32(17))
+        case .Serialization(_ /* message is ignored*/):
+            writeInt(&buf, Int32(18))
 
         
         }
@@ -7438,6 +7489,21 @@ public func generateMnemonic()throws  -> String  {
     )
 })
 }
+/**
+ * Initialize the Tokio runtime for FFI usage
+ *
+ * This function initializes a global Tokio runtime that will be used
+ * for all async operations in the FFI bindings. It ensures that only
+ * one runtime instance is created and reused across all calls.
+ *
+ * This should be called once at application startup before any other
+ * FFI functions are used.
+ */
+public func initRuntime()throws   {try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_init_runtime($0
+    )
+}
+}
 
 private enum InitializationResult {
     case ok
@@ -7455,6 +7521,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.contractVersionMismatch
     }
     if (uniffi_cdk_ffi_checksum_func_generate_mnemonic() != 17512) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_init_runtime() != 10399) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_method_activesubscription_id() != 53295) {
@@ -7718,7 +7787,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_cdk_ffi_checksum_constructor_token_from_string() != 50768) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_cdk_ffi_checksum_constructor_wallet_new() != 28215) {
+    if (uniffi_cdk_ffi_checksum_constructor_wallet_new() != 18213) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_constructor_walletsqlitedatabase_new() != 16714) {

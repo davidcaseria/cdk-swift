@@ -628,7 +628,7 @@ void uniffi_cdk_ffi_fn_free_wallet(void*_Nonnull ptr, RustCallStatus *_Nonnull o
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CONSTRUCTOR_WALLET_NEW
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CONSTRUCTOR_WALLET_NEW
-uint64_t uniffi_cdk_ffi_fn_constructor_wallet_new(RustBuffer mint_url, RustBuffer unit, RustBuffer mnemonic, void*_Nonnull db, RustBuffer config
+void*_Nonnull uniffi_cdk_ffi_fn_constructor_wallet_new(RustBuffer mint_url, RustBuffer unit, RustBuffer mnemonic, void*_Nonnull db, RustBuffer config, RustCallStatus *_Nonnull out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_CHECK_PROOFS_SPENT
@@ -805,6 +805,12 @@ uint64_t uniffi_cdk_ffi_fn_constructor_walletsqlitedatabase_new_in_memory(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_GENERATE_MNEMONIC
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_GENERATE_MNEMONIC
 RustBuffer uniffi_cdk_ffi_fn_func_generate_mnemonic(RustCallStatus *_Nonnull out_status
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_INIT_RUNTIME
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_INIT_RUNTIME
+void uniffi_cdk_ffi_fn_func_init_runtime(RustCallStatus *_Nonnull out_status
     
 );
 #endif
@@ -1091,6 +1097,12 @@ void ffi_cdk_ffi_rust_future_complete_void(uint64_t handle, RustCallStatus *_Non
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_GENERATE_MNEMONIC
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_GENERATE_MNEMONIC
 uint16_t uniffi_cdk_ffi_checksum_func_generate_mnemonic(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_INIT_RUNTIME
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_INIT_RUNTIME
+uint16_t uniffi_cdk_ffi_checksum_func_init_runtime(void
     
 );
 #endif
