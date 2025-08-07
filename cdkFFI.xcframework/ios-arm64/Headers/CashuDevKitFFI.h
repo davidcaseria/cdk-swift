@@ -251,6 +251,31 @@ typedef void (*UniffiForeignFutureCompleteVoid)(uint64_t, UniffiForeignFutureStr
     );
 
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_ACTIVESUBSCRIPTION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_ACTIVESUBSCRIPTION
+void*_Nonnull uniffi_cdk_ffi_fn_clone_activesubscription(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FREE_ACTIVESUBSCRIPTION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FREE_ACTIVESUBSCRIPTION
+void uniffi_cdk_ffi_fn_free_activesubscription(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_ACTIVESUBSCRIPTION_ID
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_ACTIVESUBSCRIPTION_ID
+RustBuffer uniffi_cdk_ffi_fn_method_activesubscription_id(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_ACTIVESUBSCRIPTION_RECV
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_ACTIVESUBSCRIPTION_RECV
+uint64_t uniffi_cdk_ffi_fn_method_activesubscription_recv(void*_Nonnull ptr
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_ACTIVESUBSCRIPTION_TRY_RECV
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_ACTIVESUBSCRIPTION_TRY_RECV
+uint64_t uniffi_cdk_ffi_fn_method_activesubscription_try_recv(void*_Nonnull ptr
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_MELTQUOTE
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_MELTQUOTE
 void*_Nonnull uniffi_cdk_ffi_fn_clone_meltquote(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
@@ -299,6 +324,56 @@ RustBuffer uniffi_cdk_ffi_fn_method_meltquote_state(void*_Nonnull ptr, RustCallS
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTE_UNIT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTE_UNIT
 RustBuffer uniffi_cdk_ffi_fn_method_meltquote_unit(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_MELTQUOTEBOLT11RESPONSE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_MELTQUOTEBOLT11RESPONSE
+void*_Nonnull uniffi_cdk_ffi_fn_clone_meltquotebolt11response(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FREE_MELTQUOTEBOLT11RESPONSE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FREE_MELTQUOTEBOLT11RESPONSE
+void uniffi_cdk_ffi_fn_free_meltquotebolt11response(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_AMOUNT
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_AMOUNT
+RustBuffer uniffi_cdk_ffi_fn_method_meltquotebolt11response_amount(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_EXPIRY
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_EXPIRY
+uint64_t uniffi_cdk_ffi_fn_method_meltquotebolt11response_expiry(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_FEE_RESERVE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_FEE_RESERVE
+RustBuffer uniffi_cdk_ffi_fn_method_meltquotebolt11response_fee_reserve(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_PAYMENT_PREIMAGE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_PAYMENT_PREIMAGE
+RustBuffer uniffi_cdk_ffi_fn_method_meltquotebolt11response_payment_preimage(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_QUOTE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_QUOTE
+RustBuffer uniffi_cdk_ffi_fn_method_meltquotebolt11response_quote(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_REQUEST
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_REQUEST
+RustBuffer uniffi_cdk_ffi_fn_method_meltquotebolt11response_request(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_STATE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_STATE
+RustBuffer uniffi_cdk_ffi_fn_method_meltquotebolt11response_state(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_UNIT
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MELTQUOTEBOLT11RESPONSE_UNIT
+RustBuffer uniffi_cdk_ffi_fn_method_meltquotebolt11response_unit(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_MINTQUOTE
@@ -369,6 +444,51 @@ RustBuffer uniffi_cdk_ffi_fn_method_mintquote_total_amount(void*_Nonnull ptr, Ru
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTE_UNIT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTE_UNIT
 RustBuffer uniffi_cdk_ffi_fn_method_mintquote_unit(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_MINTQUOTEBOLT11RESPONSE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_MINTQUOTEBOLT11RESPONSE
+void*_Nonnull uniffi_cdk_ffi_fn_clone_mintquotebolt11response(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FREE_MINTQUOTEBOLT11RESPONSE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FREE_MINTQUOTEBOLT11RESPONSE
+void uniffi_cdk_ffi_fn_free_mintquotebolt11response(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_AMOUNT
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_AMOUNT
+RustBuffer uniffi_cdk_ffi_fn_method_mintquotebolt11response_amount(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_EXPIRY
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_EXPIRY
+RustBuffer uniffi_cdk_ffi_fn_method_mintquotebolt11response_expiry(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_PUBKEY
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_PUBKEY
+RustBuffer uniffi_cdk_ffi_fn_method_mintquotebolt11response_pubkey(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_QUOTE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_QUOTE
+RustBuffer uniffi_cdk_ffi_fn_method_mintquotebolt11response_quote(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_REQUEST
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_REQUEST
+RustBuffer uniffi_cdk_ffi_fn_method_mintquotebolt11response_request(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_STATE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_STATE
+RustBuffer uniffi_cdk_ffi_fn_method_mintquotebolt11response_state(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_UNIT
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_MINTQUOTEBOLT11RESPONSE_UNIT
+RustBuffer uniffi_cdk_ffi_fn_method_mintquotebolt11response_unit(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_PREPAREDSEND
@@ -614,6 +734,11 @@ uint64_t uniffi_cdk_ffi_fn_method_wallet_set_cat(void*_Nonnull ptr, RustBuffer c
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_SET_REFRESH_TOKEN
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_SET_REFRESH_TOKEN
 uint64_t uniffi_cdk_ffi_fn_method_wallet_set_refresh_token(void*_Nonnull ptr, RustBuffer refresh_token
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_SUBSCRIBE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_SUBSCRIBE
+uint64_t uniffi_cdk_ffi_fn_method_wallet_subscribe(void*_Nonnull ptr, RustBuffer params
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_SWAP
@@ -938,6 +1063,24 @@ uint16_t uniffi_cdk_ffi_checksum_func_generate_mnemonic(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_ACTIVESUBSCRIPTION_ID
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_ACTIVESUBSCRIPTION_ID
+uint16_t uniffi_cdk_ffi_checksum_method_activesubscription_id(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_ACTIVESUBSCRIPTION_RECV
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_ACTIVESUBSCRIPTION_RECV
+uint16_t uniffi_cdk_ffi_checksum_method_activesubscription_recv(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_ACTIVESUBSCRIPTION_TRY_RECV
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_ACTIVESUBSCRIPTION_TRY_RECV
+uint16_t uniffi_cdk_ffi_checksum_method_activesubscription_try_recv(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTE_AMOUNT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTE_AMOUNT
 uint16_t uniffi_cdk_ffi_checksum_method_meltquote_amount(void
@@ -983,6 +1126,54 @@ uint16_t uniffi_cdk_ffi_checksum_method_meltquote_state(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTE_UNIT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTE_UNIT
 uint16_t uniffi_cdk_ffi_checksum_method_meltquote_unit(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_AMOUNT
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_AMOUNT
+uint16_t uniffi_cdk_ffi_checksum_method_meltquotebolt11response_amount(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_EXPIRY
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_EXPIRY
+uint16_t uniffi_cdk_ffi_checksum_method_meltquotebolt11response_expiry(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_FEE_RESERVE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_FEE_RESERVE
+uint16_t uniffi_cdk_ffi_checksum_method_meltquotebolt11response_fee_reserve(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_PAYMENT_PREIMAGE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_PAYMENT_PREIMAGE
+uint16_t uniffi_cdk_ffi_checksum_method_meltquotebolt11response_payment_preimage(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_QUOTE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_QUOTE
+uint16_t uniffi_cdk_ffi_checksum_method_meltquotebolt11response_quote(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_REQUEST
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_REQUEST
+uint16_t uniffi_cdk_ffi_checksum_method_meltquotebolt11response_request(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_STATE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_STATE
+uint16_t uniffi_cdk_ffi_checksum_method_meltquotebolt11response_state(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_UNIT
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MELTQUOTEBOLT11RESPONSE_UNIT
+uint16_t uniffi_cdk_ffi_checksum_method_meltquotebolt11response_unit(void
     
 );
 #endif
@@ -1055,6 +1246,48 @@ uint16_t uniffi_cdk_ffi_checksum_method_mintquote_total_amount(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTE_UNIT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTE_UNIT
 uint16_t uniffi_cdk_ffi_checksum_method_mintquote_unit(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_AMOUNT
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_AMOUNT
+uint16_t uniffi_cdk_ffi_checksum_method_mintquotebolt11response_amount(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_EXPIRY
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_EXPIRY
+uint16_t uniffi_cdk_ffi_checksum_method_mintquotebolt11response_expiry(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_PUBKEY
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_PUBKEY
+uint16_t uniffi_cdk_ffi_checksum_method_mintquotebolt11response_pubkey(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_QUOTE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_QUOTE
+uint16_t uniffi_cdk_ffi_checksum_method_mintquotebolt11response_quote(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_REQUEST
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_REQUEST
+uint16_t uniffi_cdk_ffi_checksum_method_mintquotebolt11response_request(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_STATE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_STATE
+uint16_t uniffi_cdk_ffi_checksum_method_mintquotebolt11response_state(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_UNIT
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_MINTQUOTEBOLT11RESPONSE_UNIT
+uint16_t uniffi_cdk_ffi_checksum_method_mintquotebolt11response_unit(void
     
 );
 #endif
@@ -1289,6 +1522,12 @@ uint16_t uniffi_cdk_ffi_checksum_method_wallet_set_cat(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_SET_REFRESH_TOKEN
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_SET_REFRESH_TOKEN
 uint16_t uniffi_cdk_ffi_checksum_method_wallet_set_refresh_token(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_SUBSCRIBE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_SUBSCRIBE
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_subscribe(void
     
 );
 #endif
