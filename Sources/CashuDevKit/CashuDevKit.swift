@@ -2174,11 +2174,6 @@ public protocol TokenProtocol: AnyObject, Sendable {
     func proofsSimple() throws  -> [Proof]
     
     /**
-     * Convert to V3 string format
-     */
-    func toV3String()  -> String
-    
-    /**
      * Get the currency unit
      */
     func unit()  -> CurrencyUnit?
@@ -2281,16 +2276,6 @@ open func mintUrl()throws  -> MintUrl  {
 open func proofsSimple()throws  -> [Proof]  {
     return try  FfiConverterSequenceTypeProof.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
     uniffi_cdk_ffi_fn_method_token_proofs_simple(self.uniffiClonePointer(),$0
-    )
-})
-}
-    
-    /**
-     * Convert to V3 string format
-     */
-open func toV3String() -> String  {
-    return try!  FfiConverterString.lift(try! rustCall() {
-    uniffi_cdk_ffi_fn_method_token_to_v3_string(self.uniffiClonePointer(),$0
     )
 })
 }
@@ -2414,6 +2399,11 @@ public protocol WalletProtocol: AnyObject, Sendable {
     func melt(quoteId: String) async throws  -> Melted
     
     /**
+     * Get a quote for a bolt12 melt
+     */
+    func meltBolt12Quote(request: String, options: MeltOptions?) async throws  -> MeltQuote
+    
+    /**
      * Get a melt quote
      */
     func meltQuote(request: String, options: MeltOptions?) async throws  -> MeltQuote
@@ -2427,6 +2417,16 @@ public protocol WalletProtocol: AnyObject, Sendable {
      * Mint blind auth tokens
      */
     func mintBlindAuth(amount: Amount) async throws  -> [Proof]
+    
+    /**
+     * Mint tokens using bolt12
+     */
+    func mintBolt12(quoteId: String, amount: Amount?, amountSplitTarget: SplitTarget, spendingConditions: SpendingConditions?) async throws  -> [Proof]
+    
+    /**
+     * Get a quote for a bolt12 mint
+     */
+    func mintBolt12Quote(amount: Amount?, description: String?) async throws  -> MintQuote
     
     /**
      * Get a mint quote
@@ -2559,11 +2559,11 @@ open class Wallet: WalletProtocol, @unchecked Sendable {
     /**
      * Create a new Wallet from mnemonic
      */
-public convenience init(mintUrl: String, unit: CurrencyUnit, mnemonic: String, config: WalletConfig)async throws  {
+public convenience init(mintUrl: String, unit: CurrencyUnit, mnemonic: String, db: WalletSqliteDatabase, config: WalletConfig)async throws  {
     let pointer =
         try  await uniffiRustCallAsync(
             rustFutureFunc: {
-                uniffi_cdk_ffi_fn_constructor_wallet_new(FfiConverterString.lower(mintUrl),FfiConverterTypeCurrencyUnit_lower(unit),FfiConverterString.lower(mnemonic),FfiConverterTypeWalletConfig_lower(config)
+                uniffi_cdk_ffi_fn_constructor_wallet_new(FfiConverterString.lower(mintUrl),FfiConverterTypeCurrencyUnit_lower(unit),FfiConverterString.lower(mnemonic),FfiConverterTypeWalletSqliteDatabase_lower(db),FfiConverterTypeWalletConfig_lower(config)
                 )
             },
             pollFunc: ffi_cdk_ffi_rust_future_poll_pointer,
@@ -2729,6 +2729,26 @@ open func melt(quoteId: String)async throws  -> Melted  {
 }
     
     /**
+     * Get a quote for a bolt12 melt
+     */
+open func meltBolt12Quote(request: String, options: MeltOptions?)async throws  -> MeltQuote  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_melt_bolt12_quote(
+                    self.uniffiClonePointer(),
+                    FfiConverterString.lower(request),FfiConverterOptionTypeMeltOptions.lower(options)
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_pointer,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_pointer,
+            freeFunc: ffi_cdk_ffi_rust_future_free_pointer,
+            liftFunc: FfiConverterTypeMeltQuote_lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
      * Get a melt quote
      */
 open func meltQuote(request: String, options: MeltOptions?)async throws  -> MeltQuote  {
@@ -2784,6 +2804,46 @@ open func mintBlindAuth(amount: Amount)async throws  -> [Proof]  {
             completeFunc: ffi_cdk_ffi_rust_future_complete_rust_buffer,
             freeFunc: ffi_cdk_ffi_rust_future_free_rust_buffer,
             liftFunc: FfiConverterSequenceTypeProof.lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
+     * Mint tokens using bolt12
+     */
+open func mintBolt12(quoteId: String, amount: Amount?, amountSplitTarget: SplitTarget, spendingConditions: SpendingConditions?)async throws  -> [Proof]  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_mint_bolt12(
+                    self.uniffiClonePointer(),
+                    FfiConverterString.lower(quoteId),FfiConverterOptionTypeAmount.lower(amount),FfiConverterTypeSplitTarget_lower(amountSplitTarget),FfiConverterOptionTypeSpendingConditions.lower(spendingConditions)
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_rust_buffer,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_rust_buffer,
+            freeFunc: ffi_cdk_ffi_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterSequenceTypeProof.lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
+     * Get a quote for a bolt12 mint
+     */
+open func mintBolt12Quote(amount: Amount?, description: String?)async throws  -> MintQuote  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_mint_bolt12_quote(
+                    self.uniffiClonePointer(),
+                    FfiConverterOptionTypeAmount.lower(amount),FfiConverterOptionString.lower(description)
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_pointer,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_pointer,
+            freeFunc: ffi_cdk_ffi_rust_future_free_pointer,
+            liftFunc: FfiConverterTypeMintQuote_lift,
             errorHandler: FfiConverterTypeFfiError_lift
         )
 }
@@ -3159,6 +3219,162 @@ public func FfiConverterTypeWallet_lift(_ pointer: UnsafeMutableRawPointer) thro
 #endif
 public func FfiConverterTypeWallet_lower(_ value: Wallet) -> UnsafeMutableRawPointer {
     return FfiConverterTypeWallet.lower(value)
+}
+
+
+
+
+
+
+/**
+ * FFI-compatible WalletSqliteDatabase
+ */
+public protocol WalletSqliteDatabaseProtocol: AnyObject, Sendable {
+    
+}
+/**
+ * FFI-compatible WalletSqliteDatabase
+ */
+open class WalletSqliteDatabase: WalletSqliteDatabaseProtocol, @unchecked Sendable {
+    fileprivate let pointer: UnsafeMutableRawPointer!
+
+    /// Used to instantiate a [FFIObject] without an actual pointer, for fakes in tests, mostly.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public struct NoPointer {
+        public init() {}
+    }
+
+    // TODO: We'd like this to be `private` but for Swifty reasons,
+    // we can't implement `FfiConverter` without making this `required` and we can't
+    // make it `required` without making it `public`.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    required public init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        self.pointer = pointer
+    }
+
+    // This constructor can be used to instantiate a fake object.
+    // - Parameter noPointer: Placeholder value so we can have a constructor separate from the default empty one that may be implemented for classes extending [FFIObject].
+    //
+    // - Warning:
+    //     Any object instantiated with this constructor cannot be passed to an actual Rust-backed object. Since there isn't a backing [Pointer] the FFI lower functions will crash.
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public init(noPointer: NoPointer) {
+        self.pointer = nil
+    }
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+    public func uniffiClonePointer() -> UnsafeMutableRawPointer {
+        return try! rustCall { uniffi_cdk_ffi_fn_clone_walletsqlitedatabase(self.pointer, $0) }
+    }
+    /**
+     * Create a new WalletSqliteDatabase with the given work directory
+     */
+public convenience init(workDir: String)async throws  {
+    let pointer =
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_constructor_walletsqlitedatabase_new(FfiConverterString.lower(workDir)
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_pointer,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_pointer,
+            freeFunc: ffi_cdk_ffi_rust_future_free_pointer,
+            liftFunc: FfiConverterTypeWalletSqliteDatabase_lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+        
+        .uniffiClonePointer()
+    self.init(unsafeFromRawPointer: pointer)
+}
+
+    deinit {
+        guard let pointer = pointer else {
+            return
+        }
+
+        try! rustCall { uniffi_cdk_ffi_fn_free_walletsqlitedatabase(pointer, $0) }
+    }
+
+    
+    /**
+     * Create an in-memory database
+     */
+public static func newInMemory()async throws  -> WalletSqliteDatabase  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_constructor_walletsqlitedatabase_new_in_memory(
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_pointer,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_pointer,
+            freeFunc: ffi_cdk_ffi_rust_future_free_pointer,
+            liftFunc: FfiConverterTypeWalletSqliteDatabase_lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+
+    
+
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeWalletSqliteDatabase: FfiConverter {
+
+    typealias FfiType = UnsafeMutableRawPointer
+    typealias SwiftType = WalletSqliteDatabase
+
+    public static func lift(_ pointer: UnsafeMutableRawPointer) throws -> WalletSqliteDatabase {
+        return WalletSqliteDatabase(unsafeFromRawPointer: pointer)
+    }
+
+    public static func lower(_ value: WalletSqliteDatabase) -> UnsafeMutableRawPointer {
+        return value.uniffiClonePointer()
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WalletSqliteDatabase {
+        let v: UInt64 = try readInt(&buf)
+        // The Rust code won't compile if a pointer won't fit in a UInt64.
+        // We have to go via `UInt` because that's the thing that's the size of a pointer.
+        let ptr = UnsafeMutableRawPointer(bitPattern: UInt(truncatingIfNeeded: v))
+        if (ptr == nil) {
+            throw UniffiInternalError.unexpectedNullPointer
+        }
+        return try lift(ptr!)
+    }
+
+    public static func write(_ value: WalletSqliteDatabase, into buf: inout [UInt8]) {
+        // This fiddling is because `Int` is the thing that's the same size as a pointer.
+        // The Rust code won't compile if a pointer won't fit in a `UInt64`.
+        writeInt(&buf, UInt64(bitPattern: Int64(Int(bitPattern: lower(value)))))
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWalletSqliteDatabase_lift(_ pointer: UnsafeMutableRawPointer) throws -> WalletSqliteDatabase {
+    return try FfiConverterTypeWalletSqliteDatabase.lift(pointer)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeWalletSqliteDatabase_lower(_ value: WalletSqliteDatabase) -> UnsafeMutableRawPointer {
+    return FfiConverterTypeWalletSqliteDatabase.lower(value)
 }
 
 
@@ -5158,13 +5374,11 @@ public func FfiConverterTypeTransactionId_lower(_ value: TransactionId) -> RustB
  * Configuration for creating wallets
  */
 public struct WalletConfig {
-    public var workDir: String
     public var targetProofCount: UInt32?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(workDir: String, targetProofCount: UInt32?) {
-        self.workDir = workDir
+    public init(targetProofCount: UInt32?) {
         self.targetProofCount = targetProofCount
     }
 }
@@ -5176,9 +5390,6 @@ extension WalletConfig: Sendable {}
 
 extension WalletConfig: Equatable, Hashable {
     public static func ==(lhs: WalletConfig, rhs: WalletConfig) -> Bool {
-        if lhs.workDir != rhs.workDir {
-            return false
-        }
         if lhs.targetProofCount != rhs.targetProofCount {
             return false
         }
@@ -5186,7 +5397,6 @@ extension WalletConfig: Equatable, Hashable {
     }
 
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(workDir)
         hasher.combine(targetProofCount)
     }
 }
@@ -5200,13 +5410,11 @@ public struct FfiConverterTypeWalletConfig: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WalletConfig {
         return
             try WalletConfig(
-                workDir: FfiConverterString.read(from: &buf), 
                 targetProofCount: FfiConverterOptionUInt32.read(from: &buf)
         )
     }
 
     public static func write(_ value: WalletConfig, into buf: inout [UInt8]) {
-        FfiConverterString.write(value.workDir, into: &buf)
         FfiConverterOptionUInt32.write(value.targetProofCount, into: &buf)
     }
 }
@@ -7411,9 +7619,6 @@ private let initializationResult: InitializationResult = {
     if (uniffi_cdk_ffi_checksum_method_token_proofs_simple() != 24034) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_cdk_ffi_checksum_method_token_to_v3_string() != 40193) {
-        return InitializationResult.apiChecksumMismatch
-    }
     if (uniffi_cdk_ffi_checksum_method_token_unit() != 55723) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -7441,6 +7646,9 @@ private let initializationResult: InitializationResult = {
     if (uniffi_cdk_ffi_checksum_method_wallet_melt() != 33983) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_cdk_ffi_checksum_method_wallet_melt_bolt12_quote() != 25128) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_cdk_ffi_checksum_method_wallet_melt_quote() != 34904) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -7448,6 +7656,12 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_method_wallet_mint_blind_auth() != 39214) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_method_wallet_mint_bolt12() != 60444) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_method_wallet_mint_bolt12_quote() != 5708) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_method_wallet_mint_quote() != 26291) {
@@ -7504,7 +7718,13 @@ private let initializationResult: InitializationResult = {
     if (uniffi_cdk_ffi_checksum_constructor_token_from_string() != 50768) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_cdk_ffi_checksum_constructor_wallet_new() != 52166) {
+    if (uniffi_cdk_ffi_checksum_constructor_wallet_new() != 28215) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_constructor_walletsqlitedatabase_new() != 16714) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_constructor_walletsqlitedatabase_new_in_memory() != 20740) {
         return InitializationResult.apiChecksumMismatch
     }
 

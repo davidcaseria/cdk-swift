@@ -606,11 +606,6 @@ RustBuffer uniffi_cdk_ffi_fn_method_token_mint_url(void*_Nonnull ptr, RustCallSt
 RustBuffer uniffi_cdk_ffi_fn_method_token_proofs_simple(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 #endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_TOKEN_TO_V3_STRING
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_TOKEN_TO_V3_STRING
-RustBuffer uniffi_cdk_ffi_fn_method_token_to_v3_string(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
-);
-#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_TOKEN_UNIT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_TOKEN_UNIT
 RustBuffer uniffi_cdk_ffi_fn_method_token_unit(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
@@ -633,7 +628,7 @@ void uniffi_cdk_ffi_fn_free_wallet(void*_Nonnull ptr, RustCallStatus *_Nonnull o
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CONSTRUCTOR_WALLET_NEW
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CONSTRUCTOR_WALLET_NEW
-uint64_t uniffi_cdk_ffi_fn_constructor_wallet_new(RustBuffer mint_url, RustBuffer unit, RustBuffer mnemonic, RustBuffer config
+uint64_t uniffi_cdk_ffi_fn_constructor_wallet_new(RustBuffer mint_url, RustBuffer unit, RustBuffer mnemonic, void*_Nonnull db, RustBuffer config
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_CHECK_PROOFS_SPENT
@@ -671,6 +666,11 @@ uint64_t uniffi_cdk_ffi_fn_method_wallet_list_transactions(void*_Nonnull ptr, Ru
 uint64_t uniffi_cdk_ffi_fn_method_wallet_melt(void*_Nonnull ptr, RustBuffer quote_id
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MELT_BOLT12_QUOTE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MELT_BOLT12_QUOTE
+uint64_t uniffi_cdk_ffi_fn_method_wallet_melt_bolt12_quote(void*_Nonnull ptr, RustBuffer request, RustBuffer options
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MELT_QUOTE
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MELT_QUOTE
 uint64_t uniffi_cdk_ffi_fn_method_wallet_melt_quote(void*_Nonnull ptr, RustBuffer request, RustBuffer options
@@ -684,6 +684,16 @@ uint64_t uniffi_cdk_ffi_fn_method_wallet_mint(void*_Nonnull ptr, RustBuffer quot
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MINT_BLIND_AUTH
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MINT_BLIND_AUTH
 uint64_t uniffi_cdk_ffi_fn_method_wallet_mint_blind_auth(void*_Nonnull ptr, RustBuffer amount
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MINT_BOLT12
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MINT_BOLT12
+uint64_t uniffi_cdk_ffi_fn_method_wallet_mint_bolt12(void*_Nonnull ptr, RustBuffer quote_id, RustBuffer amount, RustBuffer amount_split_target, RustBuffer spending_conditions
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MINT_BOLT12_QUOTE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MINT_BOLT12_QUOTE
+uint64_t uniffi_cdk_ffi_fn_method_wallet_mint_bolt12_quote(void*_Nonnull ptr, RustBuffer amount, RustBuffer description
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_MINT_QUOTE
@@ -769,6 +779,27 @@ RustBuffer uniffi_cdk_ffi_fn_method_wallet_unit(void*_Nonnull ptr, RustCallStatu
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_VERIFY_TOKEN_DLEQ
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_VERIFY_TOKEN_DLEQ
 uint64_t uniffi_cdk_ffi_fn_method_wallet_verify_token_dleq(void*_Nonnull ptr, void*_Nonnull token
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_WALLETSQLITEDATABASE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CLONE_WALLETSQLITEDATABASE
+void*_Nonnull uniffi_cdk_ffi_fn_clone_walletsqlitedatabase(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FREE_WALLETSQLITEDATABASE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FREE_WALLETSQLITEDATABASE
+void uniffi_cdk_ffi_fn_free_walletsqlitedatabase(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CONSTRUCTOR_WALLETSQLITEDATABASE_NEW
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CONSTRUCTOR_WALLETSQLITEDATABASE_NEW
+uint64_t uniffi_cdk_ffi_fn_constructor_walletsqlitedatabase_new(RustBuffer work_dir
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CONSTRUCTOR_WALLETSQLITEDATABASE_NEW_IN_MEMORY
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_CONSTRUCTOR_WALLETSQLITEDATABASE_NEW_IN_MEMORY
+uint64_t uniffi_cdk_ffi_fn_constructor_walletsqlitedatabase_new_in_memory(void
+    
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_GENERATE_MNEMONIC
@@ -1387,12 +1418,6 @@ uint16_t uniffi_cdk_ffi_checksum_method_token_proofs_simple(void
     
 );
 #endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_TOKEN_TO_V3_STRING
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_TOKEN_TO_V3_STRING
-uint16_t uniffi_cdk_ffi_checksum_method_token_to_v3_string(void
-    
-);
-#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_TOKEN_UNIT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_TOKEN_UNIT
 uint16_t uniffi_cdk_ffi_checksum_method_token_unit(void
@@ -1447,6 +1472,12 @@ uint16_t uniffi_cdk_ffi_checksum_method_wallet_melt(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MELT_BOLT12_QUOTE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MELT_BOLT12_QUOTE
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_melt_bolt12_quote(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MELT_QUOTE
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MELT_QUOTE
 uint16_t uniffi_cdk_ffi_checksum_method_wallet_melt_quote(void
@@ -1462,6 +1493,18 @@ uint16_t uniffi_cdk_ffi_checksum_method_wallet_mint(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MINT_BLIND_AUTH
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MINT_BLIND_AUTH
 uint16_t uniffi_cdk_ffi_checksum_method_wallet_mint_blind_auth(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MINT_BOLT12
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MINT_BOLT12
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_mint_bolt12(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MINT_BOLT12_QUOTE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_MINT_BOLT12_QUOTE
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_mint_bolt12_quote(void
     
 );
 #endif
@@ -1576,6 +1619,18 @@ uint16_t uniffi_cdk_ffi_checksum_constructor_token_from_string(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_CONSTRUCTOR_WALLET_NEW
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_CONSTRUCTOR_WALLET_NEW
 uint16_t uniffi_cdk_ffi_checksum_constructor_wallet_new(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_CONSTRUCTOR_WALLETSQLITEDATABASE_NEW
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_CONSTRUCTOR_WALLETSQLITEDATABASE_NEW
+uint16_t uniffi_cdk_ffi_checksum_constructor_walletsqlitedatabase_new(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_CONSTRUCTOR_WALLETSQLITEDATABASE_NEW_IN_MEMORY
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_CONSTRUCTOR_WALLETSQLITEDATABASE_NEW_IN_MEMORY
+uint16_t uniffi_cdk_ffi_checksum_constructor_walletsqlitedatabase_new_in_memory(void
     
 );
 #endif
