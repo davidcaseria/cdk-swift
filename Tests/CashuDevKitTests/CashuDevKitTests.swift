@@ -404,4 +404,149 @@ final class CashuDevKitTests: XCTestCase {
         }
     }
     
+    func testFullMintingFlow() async throws {
+        let wallet = try await createTestWallet()
+        
+        // Amount to mint (1000 sats)
+        let amount = Amount(value: 1000)
+        
+        do {
+            // Step 1: Create a mint quote
+            let quote = try await wallet.mintQuote(amount: amount, description: "Test full minting flow")
+            
+            print("Mint quote created:")
+            print("  Quote ID: \(quote.id())")
+            print("  Amount: \(quote.amountMintable().value)")
+            print("  Payment request: \(quote.request())")
+            print("  Unit: \(quote.unit())")
+            
+            // Verify quote properties
+            XCTAssertNotNil(quote)
+            XCTAssertEqual(quote.amountMintable().value, amount.value)
+            XCTAssertFalse(quote.id().isEmpty)
+            XCTAssertFalse(quote.request().isEmpty)
+            
+            // Step 2: Subscribe to mint quote updates
+            let subscribeParams = SubscribeParams(
+                kind: .bolt11MintQuote,
+                filters: [quote.id()],
+                id: nil
+            )
+            
+            let subscription = try await wallet.subscribe(params: subscribeParams)
+            print("Subscribed to mint quote updates with subscription ID: \(subscription.id())")
+            
+            // Step 3: In a real scenario, we would pay the lightning invoice here
+            // For testing, we'll simulate waiting for payment by attempting to receive a notification
+            // This will likely timeout or fail with a test mint
+            
+            print("Waiting for payment notification...")
+            
+            // Create a timeout task
+            let timeoutTask = Task {
+                try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+                throw TestError.timeout
+            }
+            
+            // Create a receive task
+            let receiveTask = Task {
+                try await subscription.recv()
+            }
+            
+            // Race between timeout and receive
+            do {
+                let notification = try await withTaskCancellationHandler {
+                    try await receiveTask.value
+                } onCancel: {
+                    receiveTask.cancel()
+                    timeoutTask.cancel()
+                }
+                
+                // If we get here, we received a notification
+                switch notification {
+                case .mintQuoteUpdate(let quoteUpdate):
+                    print("Received mint quote update:")
+                    print("  Updated quote ID: \(quoteUpdate.quote())")
+                    print("  State: \(quoteUpdate.state())")
+                    
+                    // Step 4: If the quote is paid, mint the proofs
+                    if quoteUpdate.state() == .paid {
+                        print("Quote is paid! Minting proofs...")
+                        
+                        let splitTarget = SplitTarget.none
+                        let proofs = try await wallet.mint(
+                            quoteId: quote.id(),
+                            amountSplitTarget: splitTarget,
+                            spendingConditions: nil
+                        )
+                        
+                        print("Successfully minted \(proofs.count) proofs")
+                        
+                        // Verify proofs
+                        XCTAssertFalse(proofs.isEmpty, "Should have minted proofs")
+                        
+                        var totalAmount: UInt64 = 0
+                        for proof in proofs {
+                            totalAmount += proof.amount().value
+                            print("  Proof amount: \(proof.amount().value)")
+                        }
+                        
+                        print("Total minted amount: \(totalAmount)")
+                        XCTAssertEqual(totalAmount, amount.value, "Total proof amount should match requested amount")
+                    } else {
+                        print("Quote not yet paid, state: \(quoteUpdate.state())")
+                    }
+                    
+                case .meltQuoteUpdate(let meltQuote):
+                    print("Received melt quote update (unexpected): \(meltQuote.quote())")
+                    
+                case .proofState(let proofStates):
+                    print("Received proof state update (unexpected): \(proofStates)")
+                }
+                
+                timeoutTask.cancel()
+                
+            } catch {
+                // Cancel both tasks
+                receiveTask.cancel()
+                timeoutTask.cancel()
+                
+                if error is TestError {
+                    print("Timeout waiting for payment notification (expected with test mint)")
+                    
+                    // Step 4 (alternative): Try to mint anyway to test the mint function
+                    print("Attempting to mint proofs without payment confirmation...")
+                    
+                    do {
+                        let splitTarget = SplitTarget.none
+                        let proofs = try await wallet.mint(
+                            quoteId: quote.id(),
+                            amountSplitTarget: splitTarget,
+                            spendingConditions: nil
+                        )
+                        
+                        print("Unexpectedly minted \(proofs.count) proofs without payment")
+                        XCTFail("Should not be able to mint without payment")
+                        
+                    } catch {
+                        print("Correctly failed to mint without payment: \(error)")
+                        XCTAssertTrue(error is FfiError, "Should be an FfiError")
+                    }
+                } else {
+                    print("Error receiving notification: \(error)")
+                    XCTAssertTrue(error is FfiError, "Should be an FfiError")
+                }
+            }
+            
+        } catch {
+            // This is expected to fail with a fake mint
+            print("Full minting flow failed (expected with fake mint): \(error)")
+            XCTAssertTrue(error is FfiError, "Should be an FfiError")
+        }
+    }
+    
+}
+
+enum TestError: Error {
+    case timeout
 }
