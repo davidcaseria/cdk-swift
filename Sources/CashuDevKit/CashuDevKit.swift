@@ -3337,12 +3337,12 @@ public protocol WalletDatabase: AnyObject, Sendable {
     /**
      * Get proofs from storage
      */
-    func getProofs(mintUrl: MintUrl?, unit: CurrencyUnit?, state: [State]?, spendingConditions: [SpendingConditions]?) async throws  -> [ProofInfo]
+    func getProofs(mintUrl: MintUrl?, unit: CurrencyUnit?, state: [ProofState]?, spendingConditions: [SpendingConditions]?) async throws  -> [ProofInfo]
     
     /**
      * Update proofs state in storage
      */
-    func updateProofsState(ys: [PublicKey], state: State) async throws 
+    func updateProofsState(ys: [PublicKey], state: ProofState) async throws 
     
     /**
      * Increment Keyset counter
@@ -3834,13 +3834,13 @@ open func updateProofs(added: [ProofInfo], removedYs: [PublicKey])async throws  
     /**
      * Get proofs from storage
      */
-open func getProofs(mintUrl: MintUrl?, unit: CurrencyUnit?, state: [State]?, spendingConditions: [SpendingConditions]?)async throws  -> [ProofInfo]  {
+open func getProofs(mintUrl: MintUrl?, unit: CurrencyUnit?, state: [ProofState]?, spendingConditions: [SpendingConditions]?)async throws  -> [ProofInfo]  {
     return
         try  await uniffiRustCallAsync(
             rustFutureFunc: {
                 uniffi_cdk_ffi_fn_method_walletdatabase_get_proofs(
                     self.uniffiClonePointer(),
-                    FfiConverterOptionTypeMintUrl.lower(mintUrl),FfiConverterOptionTypeCurrencyUnit.lower(unit),FfiConverterOptionSequenceTypeState.lower(state),FfiConverterOptionSequenceTypeSpendingConditions.lower(spendingConditions)
+                    FfiConverterOptionTypeMintUrl.lower(mintUrl),FfiConverterOptionTypeCurrencyUnit.lower(unit),FfiConverterOptionSequenceTypeProofState.lower(state),FfiConverterOptionSequenceTypeSpendingConditions.lower(spendingConditions)
                 )
             },
             pollFunc: ffi_cdk_ffi_rust_future_poll_rust_buffer,
@@ -3854,13 +3854,13 @@ open func getProofs(mintUrl: MintUrl?, unit: CurrencyUnit?, state: [State]?, spe
     /**
      * Update proofs state in storage
      */
-open func updateProofsState(ys: [PublicKey], state: State)async throws   {
+open func updateProofsState(ys: [PublicKey], state: ProofState)async throws   {
     return
         try  await uniffiRustCallAsync(
             rustFutureFunc: {
                 uniffi_cdk_ffi_fn_method_walletdatabase_update_proofs_state(
                     self.uniffiClonePointer(),
-                    FfiConverterSequenceTypePublicKey.lower(ys),FfiConverterTypeState_lower(state)
+                    FfiConverterSequenceTypePublicKey.lower(ys),FfiConverterTypeProofState_lower(state)
                 )
             },
             pollFunc: ffi_cdk_ffi_rust_future_poll_void,
@@ -4862,7 +4862,7 @@ fileprivate struct UniffiCallbackInterfaceWalletDatabase {
                 return try await uniffiObj.getProofs(
                      mintUrl: try FfiConverterOptionTypeMintUrl.lift(mintUrl),
                      unit: try FfiConverterOptionTypeCurrencyUnit.lift(unit),
-                     state: try FfiConverterOptionSequenceTypeState.lift(state),
+                     state: try FfiConverterOptionSequenceTypeProofState.lift(state),
                      spendingConditions: try FfiConverterOptionSequenceTypeSpendingConditions.lift(spendingConditions)
                 )
             }
@@ -4908,7 +4908,7 @@ fileprivate struct UniffiCallbackInterfaceWalletDatabase {
                 }
                 return try await uniffiObj.updateProofsState(
                      ys: try FfiConverterSequenceTypePublicKey.lift(ys),
-                     state: try FfiConverterTypeState_lift(state)
+                     state: try FfiConverterTypeProofState_lift(state)
                 )
             }
 
@@ -5303,7 +5303,7 @@ public protocol WalletSqliteDatabaseProtocol: AnyObject, Sendable {
     
     func getMints() async throws  -> [MintUrl: MintInfo?]
     
-    func getProofs(mintUrl: MintUrl?, unit: CurrencyUnit?, state: [State]?, spendingConditions: [SpendingConditions]?) async throws  -> [ProofInfo]
+    func getProofs(mintUrl: MintUrl?, unit: CurrencyUnit?, state: [ProofState]?, spendingConditions: [SpendingConditions]?) async throws  -> [ProofInfo]
     
     func getTransaction(transactionId: TransactionId) async throws  -> Transaction?
     
@@ -5325,7 +5325,7 @@ public protocol WalletSqliteDatabaseProtocol: AnyObject, Sendable {
     
     func updateProofs(added: [ProofInfo], removedYs: [PublicKey]) async throws 
     
-    func updateProofsState(ys: [PublicKey], state: State) async throws 
+    func updateProofsState(ys: [PublicKey], state: ProofState) async throws 
     
 }
 /**
@@ -5692,13 +5692,13 @@ open func getMints()async throws  -> [MintUrl: MintInfo?]  {
         )
 }
     
-open func getProofs(mintUrl: MintUrl?, unit: CurrencyUnit?, state: [State]?, spendingConditions: [SpendingConditions]?)async throws  -> [ProofInfo]  {
+open func getProofs(mintUrl: MintUrl?, unit: CurrencyUnit?, state: [ProofState]?, spendingConditions: [SpendingConditions]?)async throws  -> [ProofInfo]  {
     return
         try  await uniffiRustCallAsync(
             rustFutureFunc: {
                 uniffi_cdk_ffi_fn_method_walletsqlitedatabase_get_proofs(
                     self.uniffiClonePointer(),
-                    FfiConverterOptionTypeMintUrl.lower(mintUrl),FfiConverterOptionTypeCurrencyUnit.lower(unit),FfiConverterOptionSequenceTypeState.lower(state),FfiConverterOptionSequenceTypeSpendingConditions.lower(spendingConditions)
+                    FfiConverterOptionTypeMintUrl.lower(mintUrl),FfiConverterOptionTypeCurrencyUnit.lower(unit),FfiConverterOptionSequenceTypeProofState.lower(state),FfiConverterOptionSequenceTypeSpendingConditions.lower(spendingConditions)
                 )
             },
             pollFunc: ffi_cdk_ffi_rust_future_poll_rust_buffer,
@@ -5879,13 +5879,13 @@ open func updateProofs(added: [ProofInfo], removedYs: [PublicKey])async throws  
         )
 }
     
-open func updateProofsState(ys: [PublicKey], state: State)async throws   {
+open func updateProofsState(ys: [PublicKey], state: ProofState)async throws   {
     return
         try  await uniffiRustCallAsync(
             rustFutureFunc: {
                 uniffi_cdk_ffi_fn_method_walletsqlitedatabase_update_proofs_state(
                     self.uniffiClonePointer(),
-                    FfiConverterSequenceTypePublicKey.lower(ys),FfiConverterTypeState_lower(state)
+                    FfiConverterSequenceTypePublicKey.lower(ys),FfiConverterTypeProofState_lower(state)
                 )
             },
             pollFunc: ffi_cdk_ffi_rust_future_poll_void,
@@ -7374,7 +7374,7 @@ public struct ProofInfo {
     /**
      * Proof state
      */
-    public var state: State
+    public var state: ProofState
     /**
      * Proof Spending Conditions
      */
@@ -7398,7 +7398,7 @@ public struct ProofInfo {
          */mintUrl: MintUrl, 
         /**
          * Proof state
-         */state: State, 
+         */state: ProofState, 
         /**
          * Proof Spending Conditions
          */spendingCondition: SpendingConditions?, 
@@ -7430,7 +7430,7 @@ public struct FfiConverterTypeProofInfo: FfiConverterRustBuffer {
                 proof: FfiConverterTypeProof.read(from: &buf), 
                 y: FfiConverterTypePublicKey.read(from: &buf), 
                 mintUrl: FfiConverterTypeMintUrl.read(from: &buf), 
-                state: FfiConverterTypeState.read(from: &buf), 
+                state: FfiConverterTypeProofState.read(from: &buf), 
                 spendingCondition: FfiConverterOptionTypeSpendingConditions.read(from: &buf), 
                 unit: FfiConverterTypeCurrencyUnit.read(from: &buf)
         )
@@ -7440,7 +7440,7 @@ public struct FfiConverterTypeProofInfo: FfiConverterRustBuffer {
         FfiConverterTypeProof.write(value.proof, into: &buf)
         FfiConverterTypePublicKey.write(value.y, into: &buf)
         FfiConverterTypeMintUrl.write(value.mintUrl, into: &buf)
-        FfiConverterTypeState.write(value.state, into: &buf)
+        FfiConverterTypeProofState.write(value.state, into: &buf)
         FfiConverterOptionTypeSpendingConditions.write(value.spendingCondition, into: &buf)
         FfiConverterTypeCurrencyUnit.write(value.unit, into: &buf)
     }
@@ -9594,100 +9594,6 @@ extension SplitTarget: Equatable, Hashable {}
 // Note that we don't yet support `indirect` for enums.
 // See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
 /**
- * FFI-compatible State (different from ProofState)
- */
-
-public enum State {
-    
-    case unspent
-    case pending
-    case spent
-    case reserved
-    case pendingSpent
-}
-
-
-#if compiler(>=6)
-extension State: Sendable {}
-#endif
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public struct FfiConverterTypeState: FfiConverterRustBuffer {
-    typealias SwiftType = State
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> State {
-        let variant: Int32 = try readInt(&buf)
-        switch variant {
-        
-        case 1: return .unspent
-        
-        case 2: return .pending
-        
-        case 3: return .spent
-        
-        case 4: return .reserved
-        
-        case 5: return .pendingSpent
-        
-        default: throw UniffiInternalError.unexpectedEnumCase
-        }
-    }
-
-    public static func write(_ value: State, into buf: inout [UInt8]) {
-        switch value {
-        
-        
-        case .unspent:
-            writeInt(&buf, Int32(1))
-        
-        
-        case .pending:
-            writeInt(&buf, Int32(2))
-        
-        
-        case .spent:
-            writeInt(&buf, Int32(3))
-        
-        
-        case .reserved:
-            writeInt(&buf, Int32(4))
-        
-        
-        case .pendingSpent:
-            writeInt(&buf, Int32(5))
-        
-        }
-    }
-}
-
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeState_lift(_ buf: RustBuffer) throws -> State {
-    return try FfiConverterTypeState.lift(buf)
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-public func FfiConverterTypeState_lower(_ value: State) -> RustBuffer {
-    return FfiConverterTypeState.lower(value)
-}
-
-
-extension State: Equatable, Hashable {}
-
-
-
-
-
-
-// Note that we don't yet support `indirect` for enums.
-// See https://github.com/mozilla/uniffi-rs/issues/396 for further discussion.
-/**
  * FFI-compatible SubscriptionKind
  */
 
@@ -10503,6 +10409,30 @@ fileprivate struct FfiConverterOptionSequenceTypeKeySetInfo: FfiConverterRustBuf
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionSequenceTypeProofState: FfiConverterRustBuffer {
+    typealias SwiftType = [ProofState]?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterSequenceTypeProofState.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterSequenceTypeProofState.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionSequenceTypeSpendingConditions: FfiConverterRustBuffer {
     typealias SwiftType = [SpendingConditions]?
 
@@ -10519,30 +10449,6 @@ fileprivate struct FfiConverterOptionSequenceTypeSpendingConditions: FfiConverte
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterSequenceTypeSpendingConditions.read(from: &buf)
-        default: throw UniffiInternalError.unexpectedOptionalTag
-        }
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterOptionSequenceTypeState: FfiConverterRustBuffer {
-    typealias SwiftType = [State]?
-
-    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
-        guard let value = value else {
-            writeInt(&buf, Int8(0))
-            return
-        }
-        writeInt(&buf, Int8(1))
-        FfiConverterSequenceTypeState.write(value, into: &buf)
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
-        switch try readInt(&buf) as Int8 {
-        case 0: return nil
-        case 1: return try FfiConverterSequenceTypeState.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -10968,31 +10874,6 @@ fileprivate struct FfiConverterSequenceTypeSpendingConditions: FfiConverterRustB
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             seq.append(try FfiConverterTypeSpendingConditions.read(from: &buf))
-        }
-        return seq
-    }
-}
-
-#if swift(>=5.8)
-@_documentation(visibility: private)
-#endif
-fileprivate struct FfiConverterSequenceTypeState: FfiConverterRustBuffer {
-    typealias SwiftType = [State]
-
-    public static func write(_ value: [State], into buf: inout [UInt8]) {
-        let len = Int32(value.count)
-        writeInt(&buf, len)
-        for item in value {
-            FfiConverterTypeState.write(item, into: &buf)
-        }
-    }
-
-    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [State] {
-        let len: Int32 = try readInt(&buf)
-        var seq = [State]()
-        seq.reserveCapacity(Int(len))
-        for _ in 0 ..< len {
-            seq.append(try FfiConverterTypeState.read(from: &buf))
         }
         return seq
     }
@@ -11533,10 +11414,10 @@ private let initializationResult: InitializationResult = {
     if (uniffi_cdk_ffi_checksum_method_walletdatabase_update_proofs() != 18069) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_cdk_ffi_checksum_method_walletdatabase_get_proofs() != 62110) {
+    if (uniffi_cdk_ffi_checksum_method_walletdatabase_get_proofs() != 10055) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_cdk_ffi_checksum_method_walletdatabase_update_proofs_state() != 28217) {
+    if (uniffi_cdk_ffi_checksum_method_walletdatabase_update_proofs_state() != 43796) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_method_walletdatabase_increment_keyset_counter() != 20166) {
@@ -11605,7 +11486,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_cdk_ffi_checksum_method_walletsqlitedatabase_get_mints() != 14065) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_cdk_ffi_checksum_method_walletsqlitedatabase_get_proofs() != 6590) {
+    if (uniffi_cdk_ffi_checksum_method_walletsqlitedatabase_get_proofs() != 48231) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_method_walletsqlitedatabase_get_transaction() != 52949) {
@@ -11638,7 +11519,7 @@ private let initializationResult: InitializationResult = {
     if (uniffi_cdk_ffi_checksum_method_walletsqlitedatabase_update_proofs() != 23133) {
         return InitializationResult.apiChecksumMismatch
     }
-    if (uniffi_cdk_ffi_checksum_method_walletsqlitedatabase_update_proofs_state() != 55179) {
+    if (uniffi_cdk_ffi_checksum_method_walletsqlitedatabase_update_proofs_state() != 51402) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_constructor_token_from_string() != 50768) {
