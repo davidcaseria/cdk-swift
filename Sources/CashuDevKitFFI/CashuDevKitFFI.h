@@ -808,12 +808,6 @@ RustBuffer uniffi_cdk_ffi_fn_func_generate_mnemonic(RustCallStatus *_Nonnull out
     
 );
 #endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_INIT_RUNTIME
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_INIT_RUNTIME
-void uniffi_cdk_ffi_fn_func_init_runtime(RustCallStatus *_Nonnull out_status
-    
-);
-#endif
 #ifndef UNIFFI_FFIDEF_FFI_CDK_FFI_RUSTBUFFER_ALLOC
 #define UNIFFI_FFIDEF_FFI_CDK_FFI_RUSTBUFFER_ALLOC
 RustBuffer ffi_cdk_ffi_rustbuffer_alloc(uint64_t size, RustCallStatus *_Nonnull out_status
@@ -1097,12 +1091,6 @@ void ffi_cdk_ffi_rust_future_complete_void(uint64_t handle, RustCallStatus *_Non
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_GENERATE_MNEMONIC
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_GENERATE_MNEMONIC
 uint16_t uniffi_cdk_ffi_checksum_func_generate_mnemonic(void
-    
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_INIT_RUNTIME
-#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_INIT_RUNTIME
-uint16_t uniffi_cdk_ffi_checksum_func_init_runtime(void
     
 );
 #endif

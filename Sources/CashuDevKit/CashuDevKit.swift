@@ -7489,24 +7489,6 @@ public func generateMnemonic()throws  -> String  {
     )
 })
 }
-/**
- * Initialize the Tokio runtime for FFI usage
- *
- * This function initializes a global Tokio runtime that will be used
- * for all async operations in the FFI bindings. It ensures that only
- * one runtime instance is created and reused across all calls.
- *
- * For current-thread runtime, this mainly serves to force lazy initialization.
- * The runtime context is entered via block_on() calls in each async function.
- *
- * This should be called once at application startup before any other
- * FFI functions are used.
- */
-public func initRuntime()throws   {try rustCallWithError(FfiConverterTypeFfiError_lift) {
-    uniffi_cdk_ffi_fn_func_init_runtime($0
-    )
-}
-}
 
 private enum InitializationResult {
     case ok
@@ -7524,9 +7506,6 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.contractVersionMismatch
     }
     if (uniffi_cdk_ffi_checksum_func_generate_mnemonic() != 17512) {
-        return InitializationResult.apiChecksumMismatch
-    }
-    if (uniffi_cdk_ffi_checksum_func_init_runtime() != 40051) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_method_activesubscription_id() != 53295) {
