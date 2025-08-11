@@ -516,6 +516,24 @@ fileprivate struct FfiConverterString: FfiConverter {
     }
 }
 
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterData: FfiConverterRustBuffer {
+    typealias SwiftType = Data
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        let len: Int32 = try readInt(&buf)
+        return Data(try readBytes(&buf, count: Int(len)))
+    }
+
+    public static func write(_ value: Data, into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        writeBytes(&buf, value)
+    }
+}
+
 
 
 
@@ -11077,6 +11095,16 @@ public func generateMnemonic()throws  -> String  {
     )
 })
 }
+/**
+ * Converts a mnemonic phrase to its entropy bytes
+ */
+public func mnemonicToEntropy(mnemonic: String)throws  -> Data  {
+    return try  FfiConverterData.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_mnemonic_to_entropy(
+        FfiConverterString.lower(mnemonic),$0
+    )
+})
+}
 
 private enum InitializationResult {
     case ok
@@ -11094,6 +11122,9 @@ private let initializationResult: InitializationResult = {
         return InitializationResult.contractVersionMismatch
     }
     if (uniffi_cdk_ffi_checksum_func_generate_mnemonic() != 17512) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_mnemonic_to_entropy() != 58572) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_method_activesubscription_id() != 53295) {
