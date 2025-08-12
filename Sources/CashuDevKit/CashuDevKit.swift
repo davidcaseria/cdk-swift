@@ -1968,6 +1968,16 @@ public protocol ProofProtocol: AnyObject, Sendable {
     func c()  -> String
     
     /**
+     * Get the DLEQ proof if present
+     */
+    func dleq()  -> ProofDleq?
+    
+    /**
+     * Check if proof has DLEQ proof
+     */
+    func hasDleq()  -> Bool
+    
+    /**
      * Check if proof is active with given keyset IDs
      */
     func isActive(activeKeysetIds: [String])  -> Bool
@@ -2064,6 +2074,26 @@ open func amount() -> Amount  {
 open func c() -> String  {
     return try!  FfiConverterString.lift(try! rustCall() {
     uniffi_cdk_ffi_fn_method_proof_c(self.uniffiClonePointer(),$0
+    )
+})
+}
+    
+    /**
+     * Get the DLEQ proof if present
+     */
+open func dleq() -> ProofDleq?  {
+    return try!  FfiConverterOptionTypeProofDleq.lift(try! rustCall() {
+    uniffi_cdk_ffi_fn_method_proof_dleq(self.uniffiClonePointer(),$0
+    )
+})
+}
+    
+    /**
+     * Check if proof has DLEQ proof
+     */
+open func hasDleq() -> Bool  {
+    return try!  FfiConverterBool.lift(try! rustCall() {
+    uniffi_cdk_ffi_fn_method_proof_has_dleq(self.uniffiClonePointer(),$0
     )
 })
 }
@@ -2198,6 +2228,11 @@ public protocol TokenProtocol: AnyObject, Sendable {
     func proofsSimple() throws  -> [Proof]
     
     /**
+     * Convert token to raw bytes
+     */
+    func toRawBytes() throws  -> Data
+    
+    /**
      * Get the currency unit
      */
     func unit()  -> CurrencyUnit?
@@ -2305,6 +2340,16 @@ open func proofsSimple()throws  -> [Proof]  {
 }
     
     /**
+     * Convert token to raw bytes
+     */
+open func toRawBytes()throws  -> Data  {
+    return try  FfiConverterData.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_method_token_to_raw_bytes(self.uniffiClonePointer(),$0
+    )
+})
+}
+    
+    /**
      * Get the currency unit
      */
 open func unit() -> CurrencyUnit?  {
@@ -2388,9 +2433,29 @@ public func FfiConverterTypeToken_lower(_ value: Token) -> UnsafeMutableRawPoint
 public protocol WalletProtocol: AnyObject, Sendable {
     
     /**
+     * Calculate fee for a given number of proofs with the specified keyset
+     */
+    func calculateFee(proofCount: UInt32, keysetId: String) async throws  -> Amount
+    
+    /**
+     * Check all pending proofs and return the total amount reclaimed
+     */
+    func checkAllPendingProofs() async throws  -> Amount
+    
+    /**
      * Check if proofs are spent
      */
     func checkProofsSpent(proofs: [Proof]) async throws  -> [Bool]
+    
+    /**
+     * Get the active keyset for the wallet's unit
+     */
+    func getActiveKeyset() async throws  -> KeySetInfo
+    
+    /**
+     * Get fees for a specific keyset ID
+     */
+    func getKeysetFeesById(keysetId: String) async throws  -> UInt64
     
     /**
      * Get mint info
@@ -2478,9 +2543,19 @@ public protocol WalletProtocol: AnyObject, Sendable {
     func receiveProofs(proofs: [Proof], options: ReceiveOptions, memo: String?) async throws  -> Amount
     
     /**
+     * Reclaim unspent proofs (mark them as unspent in the database)
+     */
+    func reclaimUnspent(proofs: [Proof]) async throws 
+    
+    /**
      * Refresh access token using the stored refresh token
      */
     func refreshAccessToken() async throws 
+    
+    /**
+     * Refresh keysets from the mint
+     */
+    func refreshKeysets() async throws  -> [KeySetInfo]
     
     /**
      * Restore wallet from seed
@@ -2609,6 +2684,46 @@ public convenience init(mintUrl: String, unit: CurrencyUnit, mnemonic: String, d
 
     
     /**
+     * Calculate fee for a given number of proofs with the specified keyset
+     */
+open func calculateFee(proofCount: UInt32, keysetId: String)async throws  -> Amount  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_calculate_fee(
+                    self.uniffiClonePointer(),
+                    FfiConverterUInt32.lower(proofCount),FfiConverterString.lower(keysetId)
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_rust_buffer,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_rust_buffer,
+            freeFunc: ffi_cdk_ffi_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterTypeAmount_lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
+     * Check all pending proofs and return the total amount reclaimed
+     */
+open func checkAllPendingProofs()async throws  -> Amount  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_check_all_pending_proofs(
+                    self.uniffiClonePointer()
+                    
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_rust_buffer,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_rust_buffer,
+            freeFunc: ffi_cdk_ffi_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterTypeAmount_lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
      * Check if proofs are spent
      */
 open func checkProofsSpent(proofs: [Proof])async throws  -> [Bool]  {
@@ -2624,6 +2739,46 @@ open func checkProofsSpent(proofs: [Proof])async throws  -> [Bool]  {
             completeFunc: ffi_cdk_ffi_rust_future_complete_rust_buffer,
             freeFunc: ffi_cdk_ffi_rust_future_free_rust_buffer,
             liftFunc: FfiConverterSequenceBool.lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
+     * Get the active keyset for the wallet's unit
+     */
+open func getActiveKeyset()async throws  -> KeySetInfo  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_get_active_keyset(
+                    self.uniffiClonePointer()
+                    
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_rust_buffer,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_rust_buffer,
+            freeFunc: ffi_cdk_ffi_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterTypeKeySetInfo_lift,
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
+     * Get fees for a specific keyset ID
+     */
+open func getKeysetFeesById(keysetId: String)async throws  -> UInt64  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_get_keyset_fees_by_id(
+                    self.uniffiClonePointer(),
+                    FfiConverterString.lower(keysetId)
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_u64,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_u64,
+            freeFunc: ffi_cdk_ffi_rust_future_free_u64,
+            liftFunc: FfiConverterUInt64.lift,
             errorHandler: FfiConverterTypeFfiError_lift
         )
 }
@@ -2959,6 +3114,26 @@ open func receiveProofs(proofs: [Proof], options: ReceiveOptions, memo: String?)
 }
     
     /**
+     * Reclaim unspent proofs (mark them as unspent in the database)
+     */
+open func reclaimUnspent(proofs: [Proof])async throws   {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_reclaim_unspent(
+                    self.uniffiClonePointer(),
+                    FfiConverterSequenceTypeProof.lower(proofs)
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_void,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_void,
+            freeFunc: ffi_cdk_ffi_rust_future_free_void,
+            liftFunc: { $0 },
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
      * Refresh access token using the stored refresh token
      */
 open func refreshAccessToken()async throws   {
@@ -2974,6 +3149,26 @@ open func refreshAccessToken()async throws   {
             completeFunc: ffi_cdk_ffi_rust_future_complete_void,
             freeFunc: ffi_cdk_ffi_rust_future_free_void,
             liftFunc: { $0 },
+            errorHandler: FfiConverterTypeFfiError_lift
+        )
+}
+    
+    /**
+     * Refresh keysets from the mint
+     */
+open func refreshKeysets()async throws  -> [KeySetInfo]  {
+    return
+        try  await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_cdk_ffi_fn_method_wallet_refresh_keysets(
+                    self.uniffiClonePointer()
+                    
+                )
+            },
+            pollFunc: ffi_cdk_ffi_rust_future_poll_rust_buffer,
+            completeFunc: ffi_cdk_ffi_rust_future_complete_rust_buffer,
+            freeFunc: ffi_cdk_ffi_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterSequenceTypeKeySetInfo.lift,
             errorHandler: FfiConverterTypeFfiError_lift
         )
 }
@@ -6151,6 +6346,91 @@ public func FfiConverterTypeAuthProof_lower(_ value: AuthProof) -> RustBuffer {
 
 
 /**
+ * FFI-compatible DLEQ proof for blind signatures
+ */
+public struct BlindSignatureDleq {
+    /**
+     * e value (hex-encoded SecretKey)
+     */
+    public var e: String
+    /**
+     * s value (hex-encoded SecretKey)
+     */
+    public var s: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * e value (hex-encoded SecretKey)
+         */e: String, 
+        /**
+         * s value (hex-encoded SecretKey)
+         */s: String) {
+        self.e = e
+        self.s = s
+    }
+}
+
+#if compiler(>=6)
+extension BlindSignatureDleq: Sendable {}
+#endif
+
+
+extension BlindSignatureDleq: Equatable, Hashable {
+    public static func ==(lhs: BlindSignatureDleq, rhs: BlindSignatureDleq) -> Bool {
+        if lhs.e != rhs.e {
+            return false
+        }
+        if lhs.s != rhs.s {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(e)
+        hasher.combine(s)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeBlindSignatureDleq: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> BlindSignatureDleq {
+        return
+            try BlindSignatureDleq(
+                e: FfiConverterString.read(from: &buf), 
+                s: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: BlindSignatureDleq, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.e, into: &buf)
+        FfiConverterString.write(value.s, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeBlindSignatureDleq_lift(_ buf: RustBuffer) throws -> BlindSignatureDleq {
+    return try FfiConverterTypeBlindSignatureDleq.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeBlindSignatureDleq_lower(_ value: BlindSignatureDleq) -> RustBuffer {
+    return FfiConverterTypeBlindSignatureDleq.lower(value)
+}
+
+
+/**
  * FFI-compatible Conditions (for spending conditions)
  */
 public struct Conditions {
@@ -6561,13 +6841,21 @@ public struct KeySetInfo {
     public var id: String
     public var unit: CurrencyUnit
     public var active: Bool
+    /**
+     * Input fee per thousand (ppk)
+     */
+    public var inputFeePpk: UInt64
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(id: String, unit: CurrencyUnit, active: Bool) {
+    public init(id: String, unit: CurrencyUnit, active: Bool, 
+        /**
+         * Input fee per thousand (ppk)
+         */inputFeePpk: UInt64) {
         self.id = id
         self.unit = unit
         self.active = active
+        self.inputFeePpk = inputFeePpk
     }
 }
 
@@ -6587,6 +6875,9 @@ extension KeySetInfo: Equatable, Hashable {
         if lhs.active != rhs.active {
             return false
         }
+        if lhs.inputFeePpk != rhs.inputFeePpk {
+            return false
+        }
         return true
     }
 
@@ -6594,6 +6885,7 @@ extension KeySetInfo: Equatable, Hashable {
         hasher.combine(id)
         hasher.combine(unit)
         hasher.combine(active)
+        hasher.combine(inputFeePpk)
     }
 }
 
@@ -6608,7 +6900,8 @@ public struct FfiConverterTypeKeySetInfo: FfiConverterRustBuffer {
             try KeySetInfo(
                 id: FfiConverterString.read(from: &buf), 
                 unit: FfiConverterTypeCurrencyUnit.read(from: &buf), 
-                active: FfiConverterBool.read(from: &buf)
+                active: FfiConverterBool.read(from: &buf), 
+                inputFeePpk: FfiConverterUInt64.read(from: &buf)
         )
     }
 
@@ -6616,6 +6909,7 @@ public struct FfiConverterTypeKeySetInfo: FfiConverterRustBuffer {
         FfiConverterString.write(value.id, into: &buf)
         FfiConverterTypeCurrencyUnit.write(value.unit, into: &buf)
         FfiConverterBool.write(value.active, into: &buf)
+        FfiConverterUInt64.write(value.inputFeePpk, into: &buf)
     }
 }
 
@@ -6828,7 +7122,7 @@ public struct MintInfo {
     /**
      * Contact info
      */
-    public var contact: [ContactInfo]
+    public var contact: [ContactInfo]?
     /**
      * shows which NUTs the mint supports
      */
@@ -6840,7 +7134,7 @@ public struct MintInfo {
     /**
      * Mint's endpoint URLs
      */
-    public var urls: [String]
+    public var urls: [String]?
     /**
      * message of the day that the wallet must display to the user
      */
@@ -6874,7 +7168,7 @@ public struct MintInfo {
          */descriptionLong: String?, 
         /**
          * Contact info
-         */contact: [ContactInfo], 
+         */contact: [ContactInfo]?, 
         /**
          * shows which NUTs the mint supports
          */nuts: Nuts, 
@@ -6883,7 +7177,7 @@ public struct MintInfo {
          */iconUrl: String?, 
         /**
          * Mint's endpoint URLs
-         */urls: [String], 
+         */urls: [String]?, 
         /**
          * message of the day that the wallet must display to the user
          */motd: String?, 
@@ -6984,10 +7278,10 @@ public struct FfiConverterTypeMintInfo: FfiConverterRustBuffer {
                 version: FfiConverterOptionTypeMintVersion.read(from: &buf), 
                 description: FfiConverterOptionString.read(from: &buf), 
                 descriptionLong: FfiConverterOptionString.read(from: &buf), 
-                contact: FfiConverterSequenceTypeContactInfo.read(from: &buf), 
+                contact: FfiConverterOptionSequenceTypeContactInfo.read(from: &buf), 
                 nuts: FfiConverterTypeNuts.read(from: &buf), 
                 iconUrl: FfiConverterOptionString.read(from: &buf), 
-                urls: FfiConverterSequenceString.read(from: &buf), 
+                urls: FfiConverterOptionSequenceString.read(from: &buf), 
                 motd: FfiConverterOptionString.read(from: &buf), 
                 time: FfiConverterOptionUInt64.read(from: &buf), 
                 tosUrl: FfiConverterOptionString.read(from: &buf)
@@ -7000,10 +7294,10 @@ public struct FfiConverterTypeMintInfo: FfiConverterRustBuffer {
         FfiConverterOptionTypeMintVersion.write(value.version, into: &buf)
         FfiConverterOptionString.write(value.description, into: &buf)
         FfiConverterOptionString.write(value.descriptionLong, into: &buf)
-        FfiConverterSequenceTypeContactInfo.write(value.contact, into: &buf)
+        FfiConverterOptionSequenceTypeContactInfo.write(value.contact, into: &buf)
         FfiConverterTypeNuts.write(value.nuts, into: &buf)
         FfiConverterOptionString.write(value.iconUrl, into: &buf)
-        FfiConverterSequenceString.write(value.urls, into: &buf)
+        FfiConverterOptionSequenceString.write(value.urls, into: &buf)
         FfiConverterOptionString.write(value.motd, into: &buf)
         FfiConverterOptionUInt64.write(value.time, into: &buf)
         FfiConverterOptionString.write(value.tosUrl, into: &buf)
@@ -7370,6 +7664,105 @@ public func FfiConverterTypeNuts_lift(_ buf: RustBuffer) throws -> Nuts {
 #endif
 public func FfiConverterTypeNuts_lower(_ value: Nuts) -> RustBuffer {
     return FfiConverterTypeNuts.lower(value)
+}
+
+
+/**
+ * FFI-compatible DLEQ proof for proofs
+ */
+public struct ProofDleq {
+    /**
+     * e value (hex-encoded SecretKey)
+     */
+    public var e: String
+    /**
+     * s value (hex-encoded SecretKey)
+     */
+    public var s: String
+    /**
+     * r value - blinding factor (hex-encoded SecretKey)
+     */
+    public var r: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(
+        /**
+         * e value (hex-encoded SecretKey)
+         */e: String, 
+        /**
+         * s value (hex-encoded SecretKey)
+         */s: String, 
+        /**
+         * r value - blinding factor (hex-encoded SecretKey)
+         */r: String) {
+        self.e = e
+        self.s = s
+        self.r = r
+    }
+}
+
+#if compiler(>=6)
+extension ProofDleq: Sendable {}
+#endif
+
+
+extension ProofDleq: Equatable, Hashable {
+    public static func ==(lhs: ProofDleq, rhs: ProofDleq) -> Bool {
+        if lhs.e != rhs.e {
+            return false
+        }
+        if lhs.s != rhs.s {
+            return false
+        }
+        if lhs.r != rhs.r {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(e)
+        hasher.combine(s)
+        hasher.combine(r)
+    }
+}
+
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeProofDleq: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ProofDleq {
+        return
+            try ProofDleq(
+                e: FfiConverterString.read(from: &buf), 
+                s: FfiConverterString.read(from: &buf), 
+                r: FfiConverterString.read(from: &buf)
+        )
+    }
+
+    public static func write(_ value: ProofDleq, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.e, into: &buf)
+        FfiConverterString.write(value.s, into: &buf)
+        FfiConverterString.write(value.r, into: &buf)
+    }
+}
+
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeProofDleq_lift(_ buf: RustBuffer) throws -> ProofDleq {
+    return try FfiConverterTypeProofDleq.lift(buf)
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+public func FfiConverterTypeProofDleq_lower(_ value: ProofDleq) -> RustBuffer {
+    return FfiConverterTypeProofDleq.lower(value)
 }
 
 
@@ -8699,6 +9092,11 @@ public enum FfiError: Swift.Error {
     case AmountOverflow(message: String)
     
     /**
+     * Division by zero
+     */
+    case DivisionByZero(message: String)
+    
+    /**
      * Amount error
      */
     case Amount(message: String)
@@ -8802,67 +9200,71 @@ public struct FfiConverterTypeFfiError: FfiConverterRustBuffer {
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 3: return .Amount(
+        case 3: return .DivisionByZero(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 4: return .PaymentFailed(
+        case 4: return .Amount(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 5: return .PaymentPending(
+        case 5: return .PaymentFailed(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 6: return .InsufficientFunds(
+        case 6: return .PaymentPending(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 7: return .Database(
+        case 7: return .InsufficientFunds(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 8: return .Network(
+        case 8: return .Database(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 9: return .InvalidToken(
+        case 9: return .Network(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 10: return .Wallet(
+        case 10: return .InvalidToken(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 11: return .KeysetUnknown(
+        case 11: return .Wallet(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 12: return .UnitNotSupported(
+        case 12: return .KeysetUnknown(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 13: return .RuntimeTaskJoin(
+        case 13: return .UnitNotSupported(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 14: return .InvalidMnemonic(
+        case 14: return .RuntimeTaskJoin(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 15: return .InvalidUrl(
+        case 15: return .InvalidMnemonic(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 16: return .InvalidHex(
+        case 16: return .InvalidUrl(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 17: return .InvalidCryptographicKey(
+        case 17: return .InvalidHex(
             message: try FfiConverterString.read(from: &buf)
         )
         
-        case 18: return .Serialization(
+        case 18: return .InvalidCryptographicKey(
+            message: try FfiConverterString.read(from: &buf)
+        )
+        
+        case 19: return .Serialization(
             message: try FfiConverterString.read(from: &buf)
         )
         
@@ -8881,38 +9283,40 @@ public struct FfiConverterTypeFfiError: FfiConverterRustBuffer {
             writeInt(&buf, Int32(1))
         case .AmountOverflow(_ /* message is ignored*/):
             writeInt(&buf, Int32(2))
-        case .Amount(_ /* message is ignored*/):
+        case .DivisionByZero(_ /* message is ignored*/):
             writeInt(&buf, Int32(3))
-        case .PaymentFailed(_ /* message is ignored*/):
+        case .Amount(_ /* message is ignored*/):
             writeInt(&buf, Int32(4))
-        case .PaymentPending(_ /* message is ignored*/):
+        case .PaymentFailed(_ /* message is ignored*/):
             writeInt(&buf, Int32(5))
-        case .InsufficientFunds(_ /* message is ignored*/):
+        case .PaymentPending(_ /* message is ignored*/):
             writeInt(&buf, Int32(6))
-        case .Database(_ /* message is ignored*/):
+        case .InsufficientFunds(_ /* message is ignored*/):
             writeInt(&buf, Int32(7))
-        case .Network(_ /* message is ignored*/):
+        case .Database(_ /* message is ignored*/):
             writeInt(&buf, Int32(8))
-        case .InvalidToken(_ /* message is ignored*/):
+        case .Network(_ /* message is ignored*/):
             writeInt(&buf, Int32(9))
-        case .Wallet(_ /* message is ignored*/):
+        case .InvalidToken(_ /* message is ignored*/):
             writeInt(&buf, Int32(10))
-        case .KeysetUnknown(_ /* message is ignored*/):
+        case .Wallet(_ /* message is ignored*/):
             writeInt(&buf, Int32(11))
-        case .UnitNotSupported(_ /* message is ignored*/):
+        case .KeysetUnknown(_ /* message is ignored*/):
             writeInt(&buf, Int32(12))
-        case .RuntimeTaskJoin(_ /* message is ignored*/):
+        case .UnitNotSupported(_ /* message is ignored*/):
             writeInt(&buf, Int32(13))
-        case .InvalidMnemonic(_ /* message is ignored*/):
+        case .RuntimeTaskJoin(_ /* message is ignored*/):
             writeInt(&buf, Int32(14))
-        case .InvalidUrl(_ /* message is ignored*/):
+        case .InvalidMnemonic(_ /* message is ignored*/):
             writeInt(&buf, Int32(15))
-        case .InvalidHex(_ /* message is ignored*/):
+        case .InvalidUrl(_ /* message is ignored*/):
             writeInt(&buf, Int32(16))
-        case .InvalidCryptographicKey(_ /* message is ignored*/):
+        case .InvalidHex(_ /* message is ignored*/):
             writeInt(&buf, Int32(17))
-        case .Serialization(_ /* message is ignored*/):
+        case .InvalidCryptographicKey(_ /* message is ignored*/):
             writeInt(&buf, Int32(18))
+        case .Serialization(_ /* message is ignored*/):
+            writeInt(&buf, Int32(19))
 
         
         }
@@ -10163,6 +10567,30 @@ fileprivate struct FfiConverterOptionTypeMintVersion: FfiConverterRustBuffer {
 #if swift(>=5.8)
 @_documentation(visibility: private)
 #endif
+fileprivate struct FfiConverterOptionTypeProofDleq: FfiConverterRustBuffer {
+    typealias SwiftType = ProofDleq?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterTypeProofDleq.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterTypeProofDleq.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
 fileprivate struct FfiConverterOptionTypeSendMemo: FfiConverterRustBuffer {
     typealias SwiftType = SendMemo?
 
@@ -10395,6 +10823,30 @@ fileprivate struct FfiConverterOptionSequenceTypeProof: FfiConverterRustBuffer {
         switch try readInt(&buf) as Int8 {
         case 0: return nil
         case 1: return try FfiConverterSequenceTypeProof.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+@_documentation(visibility: private)
+#endif
+fileprivate struct FfiConverterOptionSequenceTypeContactInfo: FfiConverterRustBuffer {
+    typealias SwiftType = [ContactInfo]?
+
+    public static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterSequenceTypeContactInfo.write(value, into: &buf)
+    }
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterSequenceTypeContactInfo.read(from: &buf)
         default: throw UniffiInternalError.unexpectedOptionalTag
         }
     }
@@ -11087,6 +11539,306 @@ public func uniffiForeignFutureHandleCountCdkFfi() -> Int {
     UNIFFI_FOREIGN_FUTURE_HANDLE_MAP.count
 }
 /**
+ * Decode AuthProof from JSON string
+ */
+public func decodeAuthProof(json: String)throws  -> AuthProof  {
+    return try  FfiConverterTypeAuthProof_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_auth_proof(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode Conditions from JSON string
+ */
+public func decodeConditions(json: String)throws  -> Conditions  {
+    return try  FfiConverterTypeConditions_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_conditions(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode ContactInfo from JSON string
+ */
+public func decodeContactInfo(json: String)throws  -> ContactInfo  {
+    return try  FfiConverterTypeContactInfo_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_contact_info(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode KeySet from JSON string
+ */
+public func decodeKeySet(json: String)throws  -> KeySet  {
+    return try  FfiConverterTypeKeySet_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_key_set(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode KeySetInfo from JSON string
+ */
+public func decodeKeySetInfo(json: String)throws  -> KeySetInfo  {
+    return try  FfiConverterTypeKeySetInfo_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_key_set_info(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode Keys from JSON string
+ */
+public func decodeKeys(json: String)throws  -> Keys  {
+    return try  FfiConverterTypeKeys_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_keys(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode MintInfo from JSON string
+ */
+public func decodeMintInfo(json: String)throws  -> MintInfo  {
+    return try  FfiConverterTypeMintInfo_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_mint_info(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode MintVersion from JSON string
+ */
+public func decodeMintVersion(json: String)throws  -> MintVersion  {
+    return try  FfiConverterTypeMintVersion_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_mint_version(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode Nuts from JSON string
+ */
+public func decodeNuts(json: String)throws  -> Nuts  {
+    return try  FfiConverterTypeNuts_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_nuts(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode ProofStateUpdate from JSON string
+ */
+public func decodeProofStateUpdate(json: String)throws  -> ProofStateUpdate  {
+    return try  FfiConverterTypeProofStateUpdate_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_proof_state_update(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode ReceiveOptions from JSON string
+ */
+public func decodeReceiveOptions(json: String)throws  -> ReceiveOptions  {
+    return try  FfiConverterTypeReceiveOptions_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_receive_options(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode SendMemo from JSON string
+ */
+public func decodeSendMemo(json: String)throws  -> SendMemo  {
+    return try  FfiConverterTypeSendMemo_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_send_memo(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode SendOptions from JSON string
+ */
+public func decodeSendOptions(json: String)throws  -> SendOptions  {
+    return try  FfiConverterTypeSendOptions_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_send_options(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode SubscribeParams from JSON string
+ */
+public func decodeSubscribeParams(json: String)throws  -> SubscribeParams  {
+    return try  FfiConverterTypeSubscribeParams_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_subscribe_params(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Decode Transaction from JSON string
+ */
+public func decodeTransaction(json: String)throws  -> Transaction  {
+    return try  FfiConverterTypeTransaction_lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_decode_transaction(
+        FfiConverterString.lower(json),$0
+    )
+})
+}
+/**
+ * Encode AuthProof to JSON string
+ */
+public func encodeAuthProof(proof: AuthProof)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_auth_proof(
+        FfiConverterTypeAuthProof_lower(proof),$0
+    )
+})
+}
+/**
+ * Encode Conditions to JSON string
+ */
+public func encodeConditions(conditions: Conditions)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_conditions(
+        FfiConverterTypeConditions_lower(conditions),$0
+    )
+})
+}
+/**
+ * Encode ContactInfo to JSON string
+ */
+public func encodeContactInfo(info: ContactInfo)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_contact_info(
+        FfiConverterTypeContactInfo_lower(info),$0
+    )
+})
+}
+/**
+ * Encode KeySet to JSON string
+ */
+public func encodeKeySet(keyset: KeySet)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_key_set(
+        FfiConverterTypeKeySet_lower(keyset),$0
+    )
+})
+}
+/**
+ * Encode KeySetInfo to JSON string
+ */
+public func encodeKeySetInfo(info: KeySetInfo)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_key_set_info(
+        FfiConverterTypeKeySetInfo_lower(info),$0
+    )
+})
+}
+/**
+ * Encode Keys to JSON string
+ */
+public func encodeKeys(keys: Keys)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_keys(
+        FfiConverterTypeKeys_lower(keys),$0
+    )
+})
+}
+/**
+ * Encode MintInfo to JSON string
+ */
+public func encodeMintInfo(info: MintInfo)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_mint_info(
+        FfiConverterTypeMintInfo_lower(info),$0
+    )
+})
+}
+/**
+ * Encode MintVersion to JSON string
+ */
+public func encodeMintVersion(version: MintVersion)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_mint_version(
+        FfiConverterTypeMintVersion_lower(version),$0
+    )
+})
+}
+/**
+ * Encode Nuts to JSON string
+ */
+public func encodeNuts(nuts: Nuts)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_nuts(
+        FfiConverterTypeNuts_lower(nuts),$0
+    )
+})
+}
+/**
+ * Encode ProofStateUpdate to JSON string
+ */
+public func encodeProofStateUpdate(update: ProofStateUpdate)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_proof_state_update(
+        FfiConverterTypeProofStateUpdate_lower(update),$0
+    )
+})
+}
+/**
+ * Encode ReceiveOptions to JSON string
+ */
+public func encodeReceiveOptions(options: ReceiveOptions)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_receive_options(
+        FfiConverterTypeReceiveOptions_lower(options),$0
+    )
+})
+}
+/**
+ * Encode SendMemo to JSON string
+ */
+public func encodeSendMemo(memo: SendMemo)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_send_memo(
+        FfiConverterTypeSendMemo_lower(memo),$0
+    )
+})
+}
+/**
+ * Encode SendOptions to JSON string
+ */
+public func encodeSendOptions(options: SendOptions)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_send_options(
+        FfiConverterTypeSendOptions_lower(options),$0
+    )
+})
+}
+/**
+ * Encode SubscribeParams to JSON string
+ */
+public func encodeSubscribeParams(params: SubscribeParams)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_subscribe_params(
+        FfiConverterTypeSubscribeParams_lower(params),$0
+    )
+})
+}
+/**
+ * Encode Transaction to JSON string
+ */
+public func encodeTransaction(transaction: Transaction)throws  -> String  {
+    return try  FfiConverterString.lift(try rustCallWithError(FfiConverterTypeFfiError_lift) {
+    uniffi_cdk_ffi_fn_func_encode_transaction(
+        FfiConverterTypeTransaction_lower(transaction),$0
+    )
+})
+}
+/**
  * Generates a new random mnemonic phrase
  */
 public func generateMnemonic()throws  -> String  {
@@ -11120,6 +11872,96 @@ private let initializationResult: InitializationResult = {
     let scaffolding_contract_version = ffi_cdk_ffi_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_auth_proof() != 22357) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_conditions() != 18453) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_contact_info() != 40231) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_key_set() != 64139) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_key_set_info() != 26774) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_keys() != 38114) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_mint_info() != 4255) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_mint_version() != 54734) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_nuts() != 23702) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_proof_state_update() != 25192) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_receive_options() != 46457) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_send_memo() != 6016) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_send_options() != 43827) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_subscribe_params() != 6793) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_decode_transaction() != 48687) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_auth_proof() != 15755) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_conditions() != 48516) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_contact_info() != 44629) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_key_set() != 10879) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_key_set_info() != 18895) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_keys() != 20045) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_mint_info() != 31825) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_mint_version() != 3369) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_nuts() != 30942) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_proof_state_update() != 62126) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_receive_options() != 34534) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_send_memo() != 10559) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_send_options() != 12512) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_subscribe_params() != 58897) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_func_encode_transaction() != 38295) {
+        return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_func_generate_mnemonic() != 17512) {
         return InitializationResult.apiChecksumMismatch
@@ -11265,6 +12107,12 @@ private let initializationResult: InitializationResult = {
     if (uniffi_cdk_ffi_checksum_method_proof_c() != 3807) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_cdk_ffi_checksum_method_proof_dleq() != 11014) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_method_proof_has_dleq() != 6642) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_cdk_ffi_checksum_method_proof_is_active() != 40357) {
         return InitializationResult.apiChecksumMismatch
     }
@@ -11289,13 +12137,28 @@ private let initializationResult: InitializationResult = {
     if (uniffi_cdk_ffi_checksum_method_token_proofs_simple() != 24034) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_cdk_ffi_checksum_method_token_to_raw_bytes() != 25396) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_cdk_ffi_checksum_method_token_unit() != 55723) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_method_token_value() != 22223) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_cdk_ffi_checksum_method_wallet_calculate_fee() != 1751) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_method_wallet_check_all_pending_proofs() != 3292) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_cdk_ffi_checksum_method_wallet_check_proofs_spent() != 48196) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_method_wallet_get_active_keyset() != 55608) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_method_wallet_get_keyset_fees_by_id() != 51180) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_method_wallet_get_mint_info() != 46501) {
@@ -11349,7 +12212,13 @@ private let initializationResult: InitializationResult = {
     if (uniffi_cdk_ffi_checksum_method_wallet_receive_proofs() != 17448) {
         return InitializationResult.apiChecksumMismatch
     }
+    if (uniffi_cdk_ffi_checksum_method_wallet_reclaim_unspent() != 35245) {
+        return InitializationResult.apiChecksumMismatch
+    }
     if (uniffi_cdk_ffi_checksum_method_wallet_refresh_access_token() != 63251) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_cdk_ffi_checksum_method_wallet_refresh_keysets() != 60028) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_cdk_ffi_checksum_method_wallet_restore() != 48186) {

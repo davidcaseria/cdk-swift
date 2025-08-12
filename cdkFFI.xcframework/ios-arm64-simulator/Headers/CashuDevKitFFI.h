@@ -754,6 +754,16 @@ RustBuffer uniffi_cdk_ffi_fn_method_proof_amount(void*_Nonnull ptr, RustCallStat
 RustBuffer uniffi_cdk_ffi_fn_method_proof_c(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_PROOF_DLEQ
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_PROOF_DLEQ
+RustBuffer uniffi_cdk_ffi_fn_method_proof_dleq(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_PROOF_HAS_DLEQ
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_PROOF_HAS_DLEQ
+int8_t uniffi_cdk_ffi_fn_method_proof_has_dleq(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_PROOF_IS_ACTIVE
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_PROOF_IS_ACTIVE
 int8_t uniffi_cdk_ffi_fn_method_proof_is_active(void*_Nonnull ptr, RustBuffer active_keyset_ids, RustCallStatus *_Nonnull out_status
@@ -809,6 +819,11 @@ RustBuffer uniffi_cdk_ffi_fn_method_token_mint_url(void*_Nonnull ptr, RustCallSt
 RustBuffer uniffi_cdk_ffi_fn_method_token_proofs_simple(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_TOKEN_TO_RAW_BYTES
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_TOKEN_TO_RAW_BYTES
+RustBuffer uniffi_cdk_ffi_fn_method_token_to_raw_bytes(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_TOKEN_UNIT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_TOKEN_UNIT
 RustBuffer uniffi_cdk_ffi_fn_method_token_unit(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
@@ -834,9 +849,29 @@ void uniffi_cdk_ffi_fn_free_wallet(void*_Nonnull ptr, RustCallStatus *_Nonnull o
 void*_Nonnull uniffi_cdk_ffi_fn_constructor_wallet_new(RustBuffer mint_url, RustBuffer unit, RustBuffer mnemonic, void*_Nonnull db, RustBuffer config, RustCallStatus *_Nonnull out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_CALCULATE_FEE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_CALCULATE_FEE
+uint64_t uniffi_cdk_ffi_fn_method_wallet_calculate_fee(void*_Nonnull ptr, uint32_t proof_count, RustBuffer keyset_id
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_CHECK_ALL_PENDING_PROOFS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_CHECK_ALL_PENDING_PROOFS
+uint64_t uniffi_cdk_ffi_fn_method_wallet_check_all_pending_proofs(void*_Nonnull ptr
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_CHECK_PROOFS_SPENT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_CHECK_PROOFS_SPENT
 uint64_t uniffi_cdk_ffi_fn_method_wallet_check_proofs_spent(void*_Nonnull ptr, RustBuffer proofs
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_GET_ACTIVE_KEYSET
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_GET_ACTIVE_KEYSET
+uint64_t uniffi_cdk_ffi_fn_method_wallet_get_active_keyset(void*_Nonnull ptr
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_GET_KEYSET_FEES_BY_ID
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_GET_KEYSET_FEES_BY_ID
+uint64_t uniffi_cdk_ffi_fn_method_wallet_get_keyset_fees_by_id(void*_Nonnull ptr, RustBuffer keyset_id
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_GET_MINT_INFO
@@ -924,9 +959,19 @@ uint64_t uniffi_cdk_ffi_fn_method_wallet_receive(void*_Nonnull ptr, void*_Nonnul
 uint64_t uniffi_cdk_ffi_fn_method_wallet_receive_proofs(void*_Nonnull ptr, RustBuffer proofs, RustBuffer options, RustBuffer memo
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_RECLAIM_UNSPENT
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_RECLAIM_UNSPENT
+uint64_t uniffi_cdk_ffi_fn_method_wallet_reclaim_unspent(void*_Nonnull ptr, RustBuffer proofs
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_REFRESH_ACCESS_TOKEN
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_REFRESH_ACCESS_TOKEN
 uint64_t uniffi_cdk_ffi_fn_method_wallet_refresh_access_token(void*_Nonnull ptr
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_REFRESH_KEYSETS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_REFRESH_KEYSETS
+uint64_t uniffi_cdk_ffi_fn_method_wallet_refresh_keysets(void*_Nonnull ptr
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_METHOD_WALLET_RESTORE
@@ -1300,6 +1345,156 @@ uint64_t uniffi_cdk_ffi_fn_method_walletsqlitedatabase_update_proofs(void*_Nonnu
 uint64_t uniffi_cdk_ffi_fn_method_walletsqlitedatabase_update_proofs_state(void*_Nonnull ptr, RustBuffer ys, RustBuffer state
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_AUTH_PROOF
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_AUTH_PROOF
+RustBuffer uniffi_cdk_ffi_fn_func_decode_auth_proof(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_CONDITIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_CONDITIONS
+RustBuffer uniffi_cdk_ffi_fn_func_decode_conditions(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_CONTACT_INFO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_CONTACT_INFO
+RustBuffer uniffi_cdk_ffi_fn_func_decode_contact_info(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_KEY_SET
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_KEY_SET
+RustBuffer uniffi_cdk_ffi_fn_func_decode_key_set(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_KEY_SET_INFO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_KEY_SET_INFO
+RustBuffer uniffi_cdk_ffi_fn_func_decode_key_set_info(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_KEYS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_KEYS
+RustBuffer uniffi_cdk_ffi_fn_func_decode_keys(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_MINT_INFO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_MINT_INFO
+RustBuffer uniffi_cdk_ffi_fn_func_decode_mint_info(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_MINT_VERSION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_MINT_VERSION
+RustBuffer uniffi_cdk_ffi_fn_func_decode_mint_version(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_NUTS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_NUTS
+RustBuffer uniffi_cdk_ffi_fn_func_decode_nuts(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_PROOF_STATE_UPDATE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_PROOF_STATE_UPDATE
+RustBuffer uniffi_cdk_ffi_fn_func_decode_proof_state_update(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_RECEIVE_OPTIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_RECEIVE_OPTIONS
+RustBuffer uniffi_cdk_ffi_fn_func_decode_receive_options(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_SEND_MEMO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_SEND_MEMO
+RustBuffer uniffi_cdk_ffi_fn_func_decode_send_memo(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_SEND_OPTIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_SEND_OPTIONS
+RustBuffer uniffi_cdk_ffi_fn_func_decode_send_options(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_SUBSCRIBE_PARAMS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_SUBSCRIBE_PARAMS
+RustBuffer uniffi_cdk_ffi_fn_func_decode_subscribe_params(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_TRANSACTION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_DECODE_TRANSACTION
+RustBuffer uniffi_cdk_ffi_fn_func_decode_transaction(RustBuffer json, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_AUTH_PROOF
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_AUTH_PROOF
+RustBuffer uniffi_cdk_ffi_fn_func_encode_auth_proof(RustBuffer proof, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_CONDITIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_CONDITIONS
+RustBuffer uniffi_cdk_ffi_fn_func_encode_conditions(RustBuffer conditions, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_CONTACT_INFO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_CONTACT_INFO
+RustBuffer uniffi_cdk_ffi_fn_func_encode_contact_info(RustBuffer info, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_KEY_SET
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_KEY_SET
+RustBuffer uniffi_cdk_ffi_fn_func_encode_key_set(RustBuffer keyset, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_KEY_SET_INFO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_KEY_SET_INFO
+RustBuffer uniffi_cdk_ffi_fn_func_encode_key_set_info(RustBuffer info, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_KEYS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_KEYS
+RustBuffer uniffi_cdk_ffi_fn_func_encode_keys(RustBuffer keys, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_MINT_INFO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_MINT_INFO
+RustBuffer uniffi_cdk_ffi_fn_func_encode_mint_info(RustBuffer info, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_MINT_VERSION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_MINT_VERSION
+RustBuffer uniffi_cdk_ffi_fn_func_encode_mint_version(RustBuffer version, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_NUTS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_NUTS
+RustBuffer uniffi_cdk_ffi_fn_func_encode_nuts(RustBuffer nuts, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_PROOF_STATE_UPDATE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_PROOF_STATE_UPDATE
+RustBuffer uniffi_cdk_ffi_fn_func_encode_proof_state_update(RustBuffer update, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_RECEIVE_OPTIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_RECEIVE_OPTIONS
+RustBuffer uniffi_cdk_ffi_fn_func_encode_receive_options(RustBuffer options, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_SEND_MEMO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_SEND_MEMO
+RustBuffer uniffi_cdk_ffi_fn_func_encode_send_memo(RustBuffer memo, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_SEND_OPTIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_SEND_OPTIONS
+RustBuffer uniffi_cdk_ffi_fn_func_encode_send_options(RustBuffer options, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_SUBSCRIBE_PARAMS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_SUBSCRIBE_PARAMS
+RustBuffer uniffi_cdk_ffi_fn_func_encode_subscribe_params(RustBuffer params, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_TRANSACTION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_ENCODE_TRANSACTION
+RustBuffer uniffi_cdk_ffi_fn_func_encode_transaction(RustBuffer transaction, RustCallStatus *_Nonnull out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_GENERATE_MNEMONIC
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_FN_FUNC_GENERATE_MNEMONIC
 RustBuffer uniffi_cdk_ffi_fn_func_generate_mnemonic(RustCallStatus *_Nonnull out_status
@@ -1591,6 +1786,186 @@ void ffi_cdk_ffi_rust_future_free_void(uint64_t handle
 void ffi_cdk_ffi_rust_future_complete_void(uint64_t handle, RustCallStatus *_Nonnull out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_AUTH_PROOF
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_AUTH_PROOF
+uint16_t uniffi_cdk_ffi_checksum_func_decode_auth_proof(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_CONDITIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_CONDITIONS
+uint16_t uniffi_cdk_ffi_checksum_func_decode_conditions(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_CONTACT_INFO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_CONTACT_INFO
+uint16_t uniffi_cdk_ffi_checksum_func_decode_contact_info(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_KEY_SET
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_KEY_SET
+uint16_t uniffi_cdk_ffi_checksum_func_decode_key_set(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_KEY_SET_INFO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_KEY_SET_INFO
+uint16_t uniffi_cdk_ffi_checksum_func_decode_key_set_info(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_KEYS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_KEYS
+uint16_t uniffi_cdk_ffi_checksum_func_decode_keys(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_MINT_INFO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_MINT_INFO
+uint16_t uniffi_cdk_ffi_checksum_func_decode_mint_info(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_MINT_VERSION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_MINT_VERSION
+uint16_t uniffi_cdk_ffi_checksum_func_decode_mint_version(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_NUTS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_NUTS
+uint16_t uniffi_cdk_ffi_checksum_func_decode_nuts(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_PROOF_STATE_UPDATE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_PROOF_STATE_UPDATE
+uint16_t uniffi_cdk_ffi_checksum_func_decode_proof_state_update(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_RECEIVE_OPTIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_RECEIVE_OPTIONS
+uint16_t uniffi_cdk_ffi_checksum_func_decode_receive_options(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_SEND_MEMO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_SEND_MEMO
+uint16_t uniffi_cdk_ffi_checksum_func_decode_send_memo(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_SEND_OPTIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_SEND_OPTIONS
+uint16_t uniffi_cdk_ffi_checksum_func_decode_send_options(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_SUBSCRIBE_PARAMS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_SUBSCRIBE_PARAMS
+uint16_t uniffi_cdk_ffi_checksum_func_decode_subscribe_params(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_TRANSACTION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_DECODE_TRANSACTION
+uint16_t uniffi_cdk_ffi_checksum_func_decode_transaction(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_AUTH_PROOF
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_AUTH_PROOF
+uint16_t uniffi_cdk_ffi_checksum_func_encode_auth_proof(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_CONDITIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_CONDITIONS
+uint16_t uniffi_cdk_ffi_checksum_func_encode_conditions(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_CONTACT_INFO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_CONTACT_INFO
+uint16_t uniffi_cdk_ffi_checksum_func_encode_contact_info(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_KEY_SET
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_KEY_SET
+uint16_t uniffi_cdk_ffi_checksum_func_encode_key_set(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_KEY_SET_INFO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_KEY_SET_INFO
+uint16_t uniffi_cdk_ffi_checksum_func_encode_key_set_info(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_KEYS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_KEYS
+uint16_t uniffi_cdk_ffi_checksum_func_encode_keys(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_MINT_INFO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_MINT_INFO
+uint16_t uniffi_cdk_ffi_checksum_func_encode_mint_info(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_MINT_VERSION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_MINT_VERSION
+uint16_t uniffi_cdk_ffi_checksum_func_encode_mint_version(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_NUTS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_NUTS
+uint16_t uniffi_cdk_ffi_checksum_func_encode_nuts(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_PROOF_STATE_UPDATE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_PROOF_STATE_UPDATE
+uint16_t uniffi_cdk_ffi_checksum_func_encode_proof_state_update(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_RECEIVE_OPTIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_RECEIVE_OPTIONS
+uint16_t uniffi_cdk_ffi_checksum_func_encode_receive_options(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_SEND_MEMO
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_SEND_MEMO
+uint16_t uniffi_cdk_ffi_checksum_func_encode_send_memo(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_SEND_OPTIONS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_SEND_OPTIONS
+uint16_t uniffi_cdk_ffi_checksum_func_encode_send_options(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_SUBSCRIBE_PARAMS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_SUBSCRIBE_PARAMS
+uint16_t uniffi_cdk_ffi_checksum_func_encode_subscribe_params(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_TRANSACTION
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_ENCODE_TRANSACTION
+uint16_t uniffi_cdk_ffi_checksum_func_encode_transaction(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_GENERATE_MNEMONIC
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_FUNC_GENERATE_MNEMONIC
 uint16_t uniffi_cdk_ffi_checksum_func_generate_mnemonic(void
@@ -1879,6 +2254,18 @@ uint16_t uniffi_cdk_ffi_checksum_method_proof_c(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_PROOF_DLEQ
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_PROOF_DLEQ
+uint16_t uniffi_cdk_ffi_checksum_method_proof_dleq(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_PROOF_HAS_DLEQ
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_PROOF_HAS_DLEQ
+uint16_t uniffi_cdk_ffi_checksum_method_proof_has_dleq(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_PROOF_IS_ACTIVE
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_PROOF_IS_ACTIVE
 uint16_t uniffi_cdk_ffi_checksum_method_proof_is_active(void
@@ -1927,6 +2314,12 @@ uint16_t uniffi_cdk_ffi_checksum_method_token_proofs_simple(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_TOKEN_TO_RAW_BYTES
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_TOKEN_TO_RAW_BYTES
+uint16_t uniffi_cdk_ffi_checksum_method_token_to_raw_bytes(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_TOKEN_UNIT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_TOKEN_UNIT
 uint16_t uniffi_cdk_ffi_checksum_method_token_unit(void
@@ -1939,9 +2332,33 @@ uint16_t uniffi_cdk_ffi_checksum_method_token_value(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_CALCULATE_FEE
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_CALCULATE_FEE
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_calculate_fee(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_CHECK_ALL_PENDING_PROOFS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_CHECK_ALL_PENDING_PROOFS
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_check_all_pending_proofs(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_CHECK_PROOFS_SPENT
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_CHECK_PROOFS_SPENT
 uint16_t uniffi_cdk_ffi_checksum_method_wallet_check_proofs_spent(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_GET_ACTIVE_KEYSET
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_GET_ACTIVE_KEYSET
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_get_active_keyset(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_GET_KEYSET_FEES_BY_ID
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_GET_KEYSET_FEES_BY_ID
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_get_keyset_fees_by_id(void
     
 );
 #endif
@@ -2047,9 +2464,21 @@ uint16_t uniffi_cdk_ffi_checksum_method_wallet_receive_proofs(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_RECLAIM_UNSPENT
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_RECLAIM_UNSPENT
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_reclaim_unspent(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_REFRESH_ACCESS_TOKEN
 #define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_REFRESH_ACCESS_TOKEN
 uint16_t uniffi_cdk_ffi_checksum_method_wallet_refresh_access_token(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_REFRESH_KEYSETS
+#define UNIFFI_FFIDEF_UNIFFI_CDK_FFI_CHECKSUM_METHOD_WALLET_REFRESH_KEYSETS
+uint16_t uniffi_cdk_ffi_checksum_method_wallet_refresh_keysets(void
     
 );
 #endif
